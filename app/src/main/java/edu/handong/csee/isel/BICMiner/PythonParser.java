@@ -1,6 +1,5 @@
-package edu.handong.csee.isel.utils;
+package edu.handong.csee.isel.BICMiner;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class PythonParser {
         errorOutput = new StringBuffer();
     }
 
-    public void runPy() {
+    public void runComment_remover() {
 
         cmdList.add("python3 " + filePath + " " + filePath);
         String[] array = cmdList.toArray(new String[cmdList.size()]);

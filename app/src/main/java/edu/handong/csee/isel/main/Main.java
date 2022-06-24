@@ -3,14 +3,67 @@
  */
 package edu.handong.csee.isel.main;
 
-import edu.handong.csee.isel.utils.PythonParser;
+import edu.handong.csee.isel.BFCMiner.CommitMiner;
+import edu.handong.csee.isel.BICMiner.PythonParser;
+import edu.handong.csee.isel.utils.CSVReader;
+import edu.handong.csee.isel.utils.JsonWriter;
+import org.eclipse.jgit.revwalk.RevCommit;
+
+import java.util.ArrayList;
 
 public class Main {
+    private String path;
+    private ArrayList<String> URLList = null;
+    private ArrayList<ArrayList<String>> commitPerProject = null;
+    private ArrayList<String> commitIDSingle = null;
 
     public static void main(String[] args) {
-        PythonParser pythonParser = new PythonParser("/Users/leechanggong/Projects/KISTI2022/SZZpy/app/src/main/java/edu/handong/csee/isel/utils/comment_remover.py");
-        pythonParser.runPy();
-        System.out.println(PythonParser.getSuccessOutput());
+        Main main = new Main();
+        main.run(args);
+
 
     }
+    private void run(String[] args) {
+        CLIParser cliParser = new CLIParser();
+
+        ArrayList<String> projects = cliParser.CommonCLI(args);
+        this.path = cliParser.getPath();
+
+        mineBIC();
+
+        PythonParser pythonParser = new PythonParser("/Users/leechanggong/Projects/KISTI2022/SZZpy/app/src/main/java/edu/handong/csee/isel/utils/comment_remover.py");
+        pythonParser.runComment_remover();
+        System.out.println(PythonParser.getSuccessOutput());
+
+        System.out.println(System.getProperty("user.dir"));
+    }
+
+    public void mineBIC () {
+        if (this.path.endsWith(".csv")) {
+            commitPerProject = new ArrayList<>();
+            CSVReader csvReader = new CSVReader(this.path);
+            csvReader.URLReader();
+            URLList = csvReader.getURLList();
+            CommitMiner [] commitMiners = new CommitMiner[URLList.size()];
+            int i = 0;
+            for (CommitMiner perProject : commitMiners) {
+                perProject = new CommitMiner(URLList.get(i++));
+                ArrayList<String> temp = null;
+                temp = perProject.extractID();
+                commitPerProject.add(temp);
+            }
+            ArrayList<String> projectNames = new ArrayList<>();
+            for(CommitMiner tmp : commitMiners)
+                projectNames.add(tmp.getMatcherGroup());
+            JsonWriter jsonWriter = new JsonWriter(commitPerProject,projectNames);
+            jsonWriter.writeList();
+
+        } else {
+            CommitMiner commitMiner = new CommitMiner(path);
+            commitIDSingle = commitMiner.extractID();
+            JsonWriter jsonWriter = new JsonWriter(commitIDSingle,commitMiner.getMatcherGroup());
+            jsonWriter.writeSingle();
+        }
+    }
+
 }
