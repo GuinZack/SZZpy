@@ -1,4 +1,4 @@
-package edu.handong.csee.isel.utils;
+package hotdog.utils;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,9 +36,9 @@ public class JsonWriter {
                     out.print("\t\t\"fix_commit_hash\":");
                     out.println("\"" + content + "\",");
                     out.print("\t\t\"repo_name\":");
-                    out.println("\"" + projectNames.get(j) + "\"");
+                    out.println("\"" + projectNames.get(i) + "\"");
                     out.print("\t}");
-                    if (i < idLists.size()-1 && j++ < list.size()-1)
+                    if (i < idLists.size()-1 || j++ < list.size()-1)
                         out.print(",");
                     out.println();
                 }

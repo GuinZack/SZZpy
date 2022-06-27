@@ -1,4 +1,4 @@
-package edu.handong.csee.isel.BFCMiner;
+package hotdog.BFCMiner;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +23,8 @@ public class CommitMiner {
     private Git git;
     private boolean completed = false;
     //	private String filePath = "/data/CGYW/clones/";
-//	private String filePath = "/Users/nayeawon/Desktop/Exp/";
-	private String filePath = "/Users/leechanggong/Desktop/Exp/";
+	private String filePath = "/Users/nayeawon/Desktop/Exp/";
+//	private String filePath = "/Users/leechanggong/Desktop/Exp/";
 //    private String filePath = "/home/leechanggong/research/";
     //	private String filePath = "/Users/leechanggong/Desktop/";
     private String matcherGroup;

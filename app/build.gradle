@@ -37,5 +37,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.handong.csee.isel.main.App'
+    mainClass = 'hotdog.main.Main'
 }

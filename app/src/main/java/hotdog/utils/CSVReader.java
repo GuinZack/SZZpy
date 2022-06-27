@@ -1,4 +1,4 @@
-package edu.handong.csee.isel.utils;
+package hotdog.utils;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -46,7 +46,6 @@ public class CSVReader {
                         URLList.add(content);
                 }
                 isFirst = true;
-
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

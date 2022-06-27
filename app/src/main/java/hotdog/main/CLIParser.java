@@ -1,4 +1,4 @@
-package edu.handong.csee.isel.main;
+package hotdog.main;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -9,22 +9,22 @@ import java.util.ArrayList;
 
 public class CLIParser {
 
-    private ArrayList<String> address;
     private String path;
+    private String szzOption;
     private boolean help;
 
-    public ArrayList<String> CommonCLI (String[] args) {
+
+    public CLIParser (String[] args) {
         Options options = createOptions();
-        address = new ArrayList<String>();
         if(parseOptions(options, args)){
             if (help) {
                 printHelp(options);
             }
         }
-        return address;
     }
 
     public String getPath() { return path; }
+    public String getSzzOption() { return szzOption; }
 
 
     private boolean parseOptions(Options options, String[] args) {
@@ -32,8 +32,8 @@ public class CLIParser {
         try {
             CommandLine cmd = parser.parse(options, args);
             path = cmd.getOptionValue("p");
+            szzOption = cmd.getOptionValue("szzOpt");
             help = cmd.hasOption("h");
-
         } catch (Exception e) {
             e.printStackTrace();
             printHelp(options);
@@ -51,6 +51,13 @@ public class CLIParser {
                 .desc("Set a path of a directory of a cloned project, a URL, or a path with a csv file")
                 .hasArg()
                 .argName("Local path")
+                .required()
+                .build());
+
+        options.addOption(Option.builder("szzOpt").longOpt("szzOption")
+                .desc("")
+                .hasArg()
+                .argName("Option for SZZ Algorithm")
                 .build());
 
         options.addOption(Option.builder("h").longOpt("help")
@@ -63,9 +70,9 @@ public class CLIParser {
     private void printHelp(Options options) {
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
-        String header = "AST Change Analyzer";
+        String header = "SZZpy";
         String footer ="\nPlease report issues at https://github.com/ISEL-HGU/ASTChangeAnalyzer";
-        formatter.printHelp("ASTChangeAnalyzer", header, options, footer, true);
+        formatter.printHelp("SZZpy", header, options, footer, true);
     }
 }
 
