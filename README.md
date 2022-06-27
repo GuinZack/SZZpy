@@ -1,3 +1,2 @@
 # SZZpy
-
-R-SZZ algorithm to find and analyze code changes for open source python projects
+Chnage Prone Mining Tool built based on the approach introduced in Evaluating SZZ Implementations Through a Developer-informed Oracle (https://github.com/grosa1/pyszz)
