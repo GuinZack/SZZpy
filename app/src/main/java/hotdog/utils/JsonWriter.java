@@ -25,7 +25,7 @@ public class JsonWriter {
     public void writeList() {
         savePath = System.getProperty("user.dir");
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "/data/BIC_list.json");
+            FileOutputStream fos = new FileOutputStream(savePath + "/data/PC_list.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
             int i = 0;
@@ -61,7 +61,7 @@ public class JsonWriter {
     public void writeSingle() {
         savePath = System.getProperty("user.dir");
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "/data/BIC_list.json");
+            FileOutputStream fos = new FileOutputStream(savePath + "/data/PC_list.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
             int i = 0;

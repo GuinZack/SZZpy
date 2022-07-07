@@ -1,9 +1,11 @@
-package hotdog.BICMiner;
+package hotdog.CPCMiner;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PythonParser {
+public class pyszzExecutor {
     private static String pySZZPath = System.getProperty("user.dir") + "/app/src/main/java/hotdog/BICMiner/pyszz";
     private static Process process = null;
     private static Runtime runtime = Runtime.getRuntime();
@@ -27,13 +29,13 @@ public class PythonParser {
         errorOutput = new StringBuffer();
     }
 
-    public static void runPySZZ(String szzOpt) {
+    public static void runPySZZ(String szzOpt, boolean log) {
 
         defaultSettings();
 
         String pySZZMain = pySZZPath + "/main.py";
 
-        String pathToBugFixesJson = System.getProperty("user.dir") + "/data/BIC_list.json";
+        String pathToBugFixesJson = System.getProperty("user.dir") + "/data/PC_list.json";
 
         String szzYml = pySZZPath + "/conf/";
         switch (szzOpt.toUpperCase()) {
@@ -50,10 +52,10 @@ public class PythonParser {
             default:
                 szzYml += "rszz.yml";
         }
-
+// setting required
 //        String pathToClonedRepoDir = "/data/CGYW/clones";
-        String pathToClonedRepoDir = "/Users/nayeawon/Desktop";
-
+//        String pathToClonedRepoDir = "/Users/nayeawon/Desktop";
+        String pathToClonedRepoDir = "/Users/leechanggong/Desktop/Exp";
 
         // python3 main.py /path/to/bug-fixes.json /path/to/configuration-file.yml /path/to/repo-directory
         cmdList.add("python3 " + pySZZMain + " " + pathToBugFixesJson + " " + szzYml + " " + pathToClonedRepoDir);
@@ -72,10 +74,10 @@ public class PythonParser {
                     errorOutput.append(msg + System.getProperty("line.separator"));
             }
             process.waitFor();
-            if (process.exitValue() == 0) {
+            if (process.exitValue() == 252) {
                 System.out.println("\nPySZZ Finished\n");
             } else {
-                System.err.println("\nPySZZ Failed\n");
+                System.err.println("\nPySZZ Failed\n" + "Exit code: " + process.exitValue());
                 if (errorOutput != null)
                     System.out.println(errorOutput);
             }
@@ -89,9 +91,30 @@ public class PythonParser {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            if (log) {
+                writeLog(errorOutput);
+            }
         }
     }
 
+    public static void writeLog (StringBuffer output) {
+
+        try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            PrintWriter out = new PrintWriter(System.getProperty("user.dir") + "/data/log_" + dtf.format(now) + ".txt");
+            BufferedWriter bwr = new BufferedWriter(out);
+            bwr.write(output.toString().toCharArray());
+
+            bwr.flush();
+            bwr.close();
+            out.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     public static StringBuffer getSuccessOutput() {
         return successOutput;
     }

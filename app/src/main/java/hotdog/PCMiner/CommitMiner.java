@@ -1,4 +1,4 @@
-package hotdog.BFCMiner;
+package hotdog.PCMiner;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.IterableUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.TransportException;
@@ -23,8 +22,8 @@ public class CommitMiner {
     private Git git;
     private boolean completed = false;
     //	private String filePath = "/data/CGYW/clones/";
-	private String filePath = "/Users/nayeawon/Desktop/Exp/";
-//	private String filePath = "/Users/leechanggong/Desktop/Exp/";
+//	private String filePath = "/Users/nayeawon/Desktop/Exp/";
+	private String filePath = "/Users/leechanggong/Desktop/Exp/";
 //    private String filePath = "/home/leechanggong/research/";
     //	private String filePath = "/Users/leechanggong/Desktop/";
     private String matcherGroup;

@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public class CLIParser {
 
     private String path;
-    private String szzOption;
+    private String szzOption = "r";
+    private boolean log;
     private boolean help;
 
 
@@ -25,6 +26,7 @@ public class CLIParser {
 
     public String getPath() { return path; }
     public String getSzzOption() { return szzOption; }
+    public boolean getLog() { return log; }
 
 
     private boolean parseOptions(Options options, String[] args) {
@@ -33,7 +35,9 @@ public class CLIParser {
             CommandLine cmd = parser.parse(options, args);
             path = cmd.getOptionValue("p");
             szzOption = cmd.getOptionValue("szzOpt");
+            log = cmd.hasOption("l");
             help = cmd.hasOption("h");
+
         } catch (Exception e) {
             e.printStackTrace();
             printHelp(options);
@@ -58,6 +62,10 @@ public class CLIParser {
                 .desc("")
                 .hasArg()
                 .argName("Option for SZZ Algorithm")
+                .build());
+
+        options.addOption(Option.builder("l").longOpt("log")
+                .desc("adding this flag leaves log file")
                 .build());
 
         options.addOption(Option.builder("h").longOpt("help")

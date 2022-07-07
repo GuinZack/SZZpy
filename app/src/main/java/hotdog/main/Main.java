@@ -1,7 +1,7 @@
 package hotdog.main;
 
-import hotdog.BFCMiner.CommitMiner;
-import hotdog.BICMiner.PythonParser;
+import hotdog.PCMiner.CommitMiner;
+import hotdog.CPCMiner.pyszzExecutor;
 import hotdog.utils.CSVReader;
 import hotdog.utils.JsonWriter;
 
@@ -24,7 +24,7 @@ public class Main {
         this.path = cliParser.getPath();
         this.szzOpt = cliParser.getSzzOption();
         mineBIC();
-        PythonParser.runPySZZ(szzOpt);
+        //pyszzExecutor.runPySZZ(szzOpt, cliParser.getLog());
 //        System.out.println(PythonParser.getSuccessOutput());
 //
 //        System.out.println(System.getProperty("user.dir"));
