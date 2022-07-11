@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonConverter {
     private Json json;
@@ -35,7 +36,7 @@ public class JsonConverter {
             e.printStackTrace();
         }
         assert enums != null;
-        jsonList = enums.stream().toList();
+        jsonList = new ArrayList<>(enums);
 
     }
 
