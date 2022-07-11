@@ -57,7 +57,7 @@ public class pyszzExecutor {
             process.waitFor();
             process.destroy();
 
-        } catch(Exception e) { e.printStackTrace();  if (isLog) writeLog(stdout);}
+        } catch(Exception e) { e.printStackTrace();  if (isLog) writeLog(stdout); System.out.println(stdout);}
         finally {
             if (isLog) { writeLog(stdout); }
         }
