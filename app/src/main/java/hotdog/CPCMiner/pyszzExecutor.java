@@ -44,6 +44,7 @@ public class pyszzExecutor {
     private static void run(ArrayList<String> command) {
         // python3 main.py /path/to/bug-fixes.json /path/to/configuration-file.yml /path/to/repo-directory
 
+
         BufferedReader stdout = null;
 
         try {
@@ -53,7 +54,6 @@ public class pyszzExecutor {
             Process process = builder.start();
 
             stdout = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
-
             process.waitFor();
             process.destroy();
 

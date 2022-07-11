@@ -29,18 +29,18 @@ public class Main {
         this.szzOpt = cliParser.getSzzOption();
         boolean isLog = cliParser.getLog();
 
-        mineBIC();
-
+        minePC();
+        System.out.println("Feeding Json file to pyszz");
         pyszzExecutor.setProperties(workPath, isLog);
         pyszzExecutor.runPySZZ(szzOpt);
-
+        System.out.println("Pyszz successfully completed" + "\nConverting output to csv file");
         JsonConverter jsonConverter = new JsonConverter();
         jsonConverter.convertObjectToCsv();
 
         // clean up objects (remove used files)
     }
 
-    public void mineBIC () {
+    public void minePC() {
         if (inputPath.endsWith(".csv")) {
             commitPerProject = new ArrayList<>();
             ArrayList<String> projectNames = new ArrayList<>();
@@ -56,13 +56,16 @@ public class Main {
                 commitPerProject.add(temp);
                 projectNames.add(perProject.getMatcherGroup());
             }
+            System.out.println("Clone clompleted");
             JsonWriter jsonWriter = new JsonWriter(commitPerProject,projectNames);
             jsonWriter.writeList();
         } else {
             CommitMiner commitMiner = new CommitMiner(inputPath, workPath);
             commitIDSingle = commitMiner.extractID();
+            System.out.println("Clone clompleted");
             JsonWriter jsonWriter = new JsonWriter(commitIDSingle,commitMiner.getMatcherGroup());
             jsonWriter.writeSingle();
         }
+        System.out.println("Post Changes(PC) json file successfully written");
     }
 }
