@@ -34,6 +34,7 @@ public class JsonConverter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert enums != null;
         jsonList = enums.stream().toList();
 
     }
