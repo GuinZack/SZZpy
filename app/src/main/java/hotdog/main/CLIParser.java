@@ -14,7 +14,7 @@ public class CLIParser {
     private String szzOption = "r";
     private boolean log;
     private boolean help;
-
+    private String pcOrCSV;
 
     public CLIParser (String[] args) {
         Options options = createOptions();
@@ -29,7 +29,7 @@ public class CLIParser {
     public String getWorkPath() { return workPath; }
     public String getSzzOption() { return szzOption; }
     public boolean getLog() { return log; }
-
+    public String getPcOrCSV () { return pcOrCSV; }
 
     private boolean parseOptions(Options options, String[] args) {
         CommandLineParser parser = new DefaultParser();
@@ -39,6 +39,9 @@ public class CLIParser {
             workPath = cmd.getOptionValue("wp");
             szzOption = cmd.getOptionValue("szz");
             log = cmd.hasOption("l");
+            if (cmd.hasOption("pc")) pcOrCSV = "pc";
+            else if (cmd.hasOption("csv")) pcOrCSV = "csv";
+            else pcOrCSV = null;
             help = cmd.hasOption("h");
 
         } catch (Exception e) {
@@ -76,6 +79,14 @@ public class CLIParser {
 
         options.addOption(Option.builder("l").longOpt("log")
                 .desc("adding this flag leaves log file")
+                .build());
+
+        options.addOption(Option.builder("pc").longOpt("postChange")
+                .desc("exit after making PC_list.json")
+                .build());
+
+        options.addOption(Option.builder("csv").longOpt("csv")
+                .desc("make csv file from the output of pyszz")
                 .build());
 
         options.addOption(Option.builder("h").longOpt("help")

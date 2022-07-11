@@ -29,6 +29,15 @@ public class Main {
         this.szzOpt = cliParser.getSzzOption();
         boolean isLog = cliParser.getLog();
 
+        if (cliParser.getPcOrCSV().equals("pc")) {
+            minePC();
+            System.exit(1);
+        } else if (cliParser.getPcOrCSV().equals("csv")) {
+            JsonConverter jsonConverter = new JsonConverter();
+            jsonConverter.convertObjectToCsv();
+            System.exit(1);
+        }
+
         minePC();
         System.out.println("Feeding Json file to pyszz");
         pyszzExecutor.setProperties(workPath, isLog);
