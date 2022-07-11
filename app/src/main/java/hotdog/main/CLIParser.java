@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 public class CLIParser {
 
-    private String path;
+    private String inputPath;
+    private String workPath;
     private String szzOption = "r";
     private boolean log;
     private boolean help;
@@ -24,7 +25,8 @@ public class CLIParser {
         }
     }
 
-    public String getPath() { return path; }
+    public String getInputPath() { return inputPath; }
+    public String getWorkPath() { return workPath; }
     public String getSzzOption() { return szzOption; }
     public boolean getLog() { return log; }
 
@@ -33,8 +35,9 @@ public class CLIParser {
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine cmd = parser.parse(options, args);
-            path = cmd.getOptionValue("p");
-            szzOption = cmd.getOptionValue("szzOpt");
+            inputPath = cmd.getOptionValue("ip");
+            workPath = cmd.getOptionValue("wp");
+            szzOption = cmd.getOptionValue("szz");
             log = cmd.hasOption("l");
             help = cmd.hasOption("h");
 
@@ -51,15 +54,22 @@ public class CLIParser {
 
         Options options = new Options();
 
-        options.addOption(Option.builder("p").longOpt("path")
+        options.addOption(Option.builder("ip").longOpt("inputPath")
                 .desc("Set a path of a directory of a cloned project, a URL, or a path with a csv file")
                 .hasArg()
                 .argName("Local path")
                 .required()
                 .build());
 
-        options.addOption(Option.builder("szzOpt").longOpt("szzOption")
-                .desc("")
+        options.addOption(Option.builder("wp").longOpt("workPath")
+                .desc("Set a path of a directory of a cloned project, or a path of a working directory")
+                .hasArg()
+                .argName("Local path")
+                .required()
+                .build());
+
+        options.addOption(Option.builder("szz").longOpt("szzOption")
+                .desc("Set a SZZ algorithm")
                 .hasArg()
                 .argName("Option for SZZ Algorithm")
                 .build());

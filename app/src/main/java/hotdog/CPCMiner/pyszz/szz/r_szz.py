@@ -19,7 +19,7 @@ class RSZZ(MASZZ):
     # TODO: add parse and type check on kwargs
     def find_bic(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> Set[Commit]:
         bic_candidates = super().find_bic(fix_commit_hash, impacted_files, **kwargs)
-
+        print(bic_candidates)
         latest_bic = None
         if len(bic_candidates) > 0:
             latest_bic = max(bic_candidates, key=attrgetter('committed_date'))

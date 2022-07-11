@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import json
 import logging as log
 import os
@@ -14,7 +15,7 @@ from szz.ma_szz import MASZZ, DetectLineMoved
 from szz.r_szz import RSZZ
 from szz.ra_szz import RASZZ
 
-log.basicConfig(level=log.INFO, format='%(asctime)s :: %(levelname)s :: %(message)s')
+log.basicConfig(level=log.INFO, format='%(levelname)s :: %(message)s')
 log.getLogger('pydriller').setLevel(log.WARNING)
 
 
@@ -23,6 +24,7 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
         bugfix_commits = json.loads(in_file.read())
 
     tot = len(bugfix_commits)
+    cpc_pc_pairs = []
     for i, commit in enumerate(bugfix_commits):
         bug_introducing_commits = set()
         repo_name = commit['repo_name']
@@ -103,10 +105,13 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
             exit(-3)
 
         log.info(f"result: {bug_introducing_commits}")
-        bugfix_commits[i]["inducing_commit_hash"] = [bic.hexsha for bic in bug_introducing_commits if bic]
+
+        if len(bug_introducing_commits) > 0:
+            bugfix_commits[i]["inducing_commit_hash"] = [bic.hexsha for bic in bug_introducing_commits if bic]
+            cpc_pc_pairs.append(bugfix_commits[i])
 
     with open(out_json, 'w') as out:
-        json.dump(bugfix_commits, out)
+        json.dump(cpc_pc_pairs, out)
 
     log.info("+++ DONE +++")
 
@@ -142,6 +147,6 @@ if __name__ == "__main__":
         log.error('The configuration file does not define the SZZ name. Please, fix.')
         exit(-3)
     
-    log.info(f'Launching {szz_name}-szz')
+    #log.info(f'Launching {szz_name}-szz')
 
     main(input_json, out_json, conf, repos_dir)

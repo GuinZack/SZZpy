@@ -3,12 +3,14 @@ package hotdog.main;
 import hotdog.PCMiner.CommitMiner;
 import hotdog.CPCMiner.pyszzExecutor;
 import hotdog.utils.CSVReader;
+import hotdog.utils.JsonConverter;
 import hotdog.utils.JsonWriter;
 
 import java.util.ArrayList;
 
 public class Main {
-    private String path;
+    private String inputPath;
+    private String workPath;
     private String szzOpt;
     private ArrayList<String> URLList = null;
     private ArrayList<ArrayList<String>> commitPerProject = null;
@@ -21,26 +23,34 @@ public class Main {
 
     private void run(String[] args) {
         CLIParser cliParser = new CLIParser(args);
-        this.path = cliParser.getPath();
+
+        this.inputPath = cliParser.getInputPath();
+        this.workPath = cliParser.getWorkPath();
         this.szzOpt = cliParser.getSzzOption();
+        boolean isLog = cliParser.getLog();
+
         mineBIC();
-        //pyszzExecutor.runPySZZ(szzOpt, cliParser.getLog());
-//        System.out.println(PythonParser.getSuccessOutput());
-//
-//        System.out.println(System.getProperty("user.dir"));
+
+        pyszzExecutor.setProperties(workPath, isLog);
+        pyszzExecutor.runPySZZ(szzOpt);
+
+        JsonConverter jsonConverter = new JsonConverter();
+        jsonConverter.convertObjectToCsv();
+
+        // clean up objects (remove used files)
     }
 
     public void mineBIC () {
-        if (this.path.endsWith(".csv")) {
+        if (inputPath.endsWith(".csv")) {
             commitPerProject = new ArrayList<>();
             ArrayList<String> projectNames = new ArrayList<>();
-            CSVReader csvReader = new CSVReader(this.path);
+            CSVReader csvReader = new CSVReader(inputPath);
             csvReader.URLReader();
             URLList = csvReader.getURLList();
             CommitMiner [] commitMiners = new CommitMiner[URLList.size()];
             int i = 0;
             for (CommitMiner perProject : commitMiners) {
-                perProject = new CommitMiner(URLList.get(i++));
+                perProject = new CommitMiner(URLList.get(i++), workPath);
                 ArrayList<String> temp = null;
                 temp = perProject.extractID();
                 commitPerProject.add(temp);
@@ -49,7 +59,7 @@ public class Main {
             JsonWriter jsonWriter = new JsonWriter(commitPerProject,projectNames);
             jsonWriter.writeList();
         } else {
-            CommitMiner commitMiner = new CommitMiner(path);
+            CommitMiner commitMiner = new CommitMiner(inputPath, workPath);
             commitIDSingle = commitMiner.extractID();
             JsonWriter jsonWriter = new JsonWriter(commitIDSingle,commitMiner.getMatcherGroup());
             jsonWriter.writeSingle();

@@ -6,32 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class pyszzExecutor {
-    private static String pySZZPath = System.getProperty("user.dir") + "/app/src/main/java/hotdog/BICMiner/pyszz";
-    private static Process process = null;
-    private static Runtime runtime = Runtime.getRuntime();
-    private static StringBuffer successOutput;
-    private static StringBuffer errorOutput;
-    private static BufferedReader successBufferReader = null; // 성공 버퍼
-    private static BufferedReader errorBufferReader = null; // 오류 버퍼
-    private static String msg = null; // message
-    private static List<String> cmdList;
+    private static String pySZZPath = System.getProperty("user.dir") + "/app/src/main/java/hotdog/CPCMiner/pyszz";
+    private static String pathToClonedRepoDir;
+    private static boolean isLog;
 
-    private static void defaultSettings() {
-        cmdList = new ArrayList<String>();
-        if (System.getProperty("os.name").indexOf("Windows") > -1) {
-            cmdList.add("cmd");
-            cmdList.add("/c");
-        } else {
-            cmdList.add("/bin/sh");
-            cmdList.add("-c");
-        }
-        successOutput = new StringBuffer();
-        errorOutput = new StringBuffer();
+    public static void setProperties(String workPath, boolean log) {
+        pathToClonedRepoDir = workPath;
+        isLog = log;
     }
 
-    public static void runPySZZ(String szzOpt, boolean log) {
-
-        defaultSettings();
+    public static void runPySZZ(String szzOpt) {
 
         String pySZZMain = pySZZPath + "/main.py";
 
@@ -52,70 +36,67 @@ public class pyszzExecutor {
             default:
                 szzYml += "rszz.yml";
         }
-// setting required
-//        String pathToClonedRepoDir = "/data/CGYW/clones";
-//        String pathToClonedRepoDir = "/Users/nayeawon/Desktop";
-        String pathToClonedRepoDir = "/Users/leechanggong/Desktop/Exp";
 
+        run(getCommand(pySZZMain, pathToBugFixesJson, szzYml));
+
+    }
+
+    private static void run(ArrayList<String> command) {
         // python3 main.py /path/to/bug-fixes.json /path/to/configuration-file.yml /path/to/repo-directory
-        cmdList.add("python3 " + pySZZMain + " " + pathToBugFixesJson + " " + szzYml + " " + pathToClonedRepoDir);
 
-        String[] array = cmdList.toArray(new String[cmdList.size()]);
+        BufferedReader stdout = null;
+
         try {
-            process = runtime.exec(array);
-            successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
-            while ((msg = successBufferReader.readLine()) != null) {
-                if (successOutput != null)
-                    successOutput.append(msg + System.getProperty("line.separator"));
-            }
-            errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
-            while ((msg = errorBufferReader.readLine()) != null) {
-                if (errorOutput != null)
-                    errorOutput.append(msg + System.getProperty("line.separator"));
-            }
+            ProcessBuilder builder = new ProcessBuilder(command);
+            builder.directory(new File(pySZZPath));
+
+            Process process = builder.start();
+
+            stdout = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+
             process.waitFor();
-            if (process.exitValue() == 252) {
-                System.out.println("\nPySZZ Finished\n");
-            } else {
-                System.err.println("\nPySZZ Failed\n" + "Exit code: " + process.exitValue());
-                if (errorOutput != null)
-                    System.out.println(errorOutput);
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                process.destroy();
-                if (successBufferReader != null) successBufferReader.close();
-                if (errorBufferReader != null) errorBufferReader.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            if (log) {
-                writeLog(errorOutput);
-            }
+            process.destroy();
+
+        } catch(Exception e) { e.printStackTrace();  if (isLog) writeLog(stdout);}
+        finally {
+            if (isLog) { writeLog(stdout); }
         }
     }
 
-    public static void writeLog (StringBuffer output) {
+    private static ArrayList<String> getCommand(String pySZZMain, String pathToBugFixesJson, String szzYml) {
+        ArrayList<String> command = new ArrayList<>();
+
+        command.add("python3");
+        command.add(pySZZMain);
+        command.add(pathToBugFixesJson);
+        command.add(szzYml);
+        command.add(pathToClonedRepoDir);
+
+        return command;
+    }
+
+    public static void writeLog (BufferedReader output) {
 
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             PrintWriter out = new PrintWriter(System.getProperty("user.dir") + "/data/log_" + dtf.format(now) + ".txt");
             BufferedWriter bwr = new BufferedWriter(out);
-            bwr.write(output.toString().toCharArray());
+            StringBuffer outputStringBuffer = new StringBuffer();
+            String outputString;
+            while((outputString = output.readLine()) != null) {
+                outputStringBuffer.append(outputString + System.getProperty("line.separator"));
+            }
+
+            bwr.write(outputStringBuffer.toString());
 
             bwr.flush();
             bwr.close();
             out.close();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
-    }
-    public static StringBuffer getSuccessOutput() {
-        return successOutput;
     }
 }
