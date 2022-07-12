@@ -10,6 +10,7 @@ file_ext_to_parse:
 #  - java
 #  - js
 - py
+- ipynb
 
 ### detect in diff deleted lines only, otherwise detect only the lines that are both deleted and added
 only_deleted_lines: true

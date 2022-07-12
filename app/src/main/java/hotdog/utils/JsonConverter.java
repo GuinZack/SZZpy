@@ -15,7 +15,7 @@ public class JsonConverter {
     private class Json {
         public String fix_commit_hash;
         public String repo_name;
-        public ArrayList<String> inducing_commit_hash;
+        public List<Object> inducing_commit_hash;
     }
 
     public JsonConverter() {
@@ -45,13 +45,20 @@ public class JsonConverter {
     public void convertObjectToCsv () {
         String temp [] = path.split("cpc_r_");
         String fileName = temp[temp.length-1].replace(".json", "");
-        File file = new File(System.getProperty("user.dir") + "/data/pc_cpc_pair_"+ fileName +".csv");
+        File file = new File(System.getProperty("user.dir") + "/out/pc_cpc_pair_"+ fileName +".csv");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
-            out.println("RepoName,CPC,PC");
+            out.println("RepoName,CPC,PC,FilePath");
             for (Json j : jsonList) {
-                out.println(j.repo_name+","+j.inducing_commit_hash.get(0)+","+j.fix_commit_hash);
+                for (Object tuple : j.inducing_commit_hash) {
+
+                    String [] path_hash = tuple.toString().split(", ");
+                    path_hash[0] = path_hash[0].replace("[","");
+                    path_hash[1] = path_hash[1].replace("]","");
+                    out.println(j.repo_name+","+path_hash[1]+","+j.fix_commit_hash + "," + path_hash[0]);
+                }
+
             }
             out.flush();
             out.close();
