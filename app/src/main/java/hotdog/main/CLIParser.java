@@ -40,7 +40,7 @@ public class CLIParser {
             szzOption = cmd.getOptionValue("szz");
             log = cmd.hasOption("l");
             if (cmd.hasOption("pc")) pcOrCSV = "pc";
-            else if (cmd.hasOption("csv")) pcOrCSV = "csv";
+            else if (cmd.hasOption("cpc")) pcOrCSV = "cpc";
             else pcOrCSV = null;
             help = cmd.hasOption("h");
 
@@ -85,7 +85,7 @@ public class CLIParser {
                 .desc("exit after making PC_list.json")
                 .build());
 
-        options.addOption(Option.builder("csv").longOpt("csv")
+        options.addOption(Option.builder("cpc").longOpt("cpc")
                 .desc("make csv file from the output of pyszz")
                 .build());
 

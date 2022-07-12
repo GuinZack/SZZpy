@@ -32,7 +32,7 @@ public class Main {
         if (cliParser.getPcOrCSV().equals("pc")) {
             minePC();
             System.exit(1);
-        } else if (cliParser.getPcOrCSV().equals("csv")) {
+        } else if (cliParser.getPcOrCSV().equals("cpc")) {
             JsonConverter jsonConverter = new JsonConverter();
             jsonConverter.convertObjectToCsv();
             System.exit(1);
