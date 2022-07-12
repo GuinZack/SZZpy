@@ -19,12 +19,12 @@ pc:
 	./runs/app/bin/app -ip $(ip) -wp $(wp) -pc
 
 cpc:
-	./runs/app/bin/app -ip $(ip) -wp $(wp) -cpc
+	./runs/app/bin/app -ip $(CURDIR)/out/$(ip) -wp $(wp) -cpc
 
 pipe:
 	make pc
 	make cpc
 
 pyszz:
-	python3 $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/main.py $(CURDIR)/data/$(pc) $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/conf/agszz.yml $(wp)
+	python3 $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/main.py $(CURDIR)/data/$(pc) $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/conf/rszz.yml $(wp)
 
