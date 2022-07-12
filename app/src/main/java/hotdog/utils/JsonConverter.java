@@ -15,7 +15,7 @@ public class JsonConverter {
     private class Json {
         public String fix_commit_hash;
         public String repo_name;
-        public String inducing_commit_hash;
+        public ArrayList<String> inducing_commit_hash;
     }
 
     public JsonConverter() {
@@ -51,7 +51,7 @@ public class JsonConverter {
             PrintWriter out = new PrintWriter(fos);
             out.println("RepoName,CPC,PC");
             for (Json j : jsonList) {
-                out.println(j.repo_name+","+j.inducing_commit_hash+","+j.fix_commit_hash);
+                out.println(j.repo_name+","+j.inducing_commit_hash.get(0)+","+j.fix_commit_hash);
             }
             out.flush();
             out.close();
