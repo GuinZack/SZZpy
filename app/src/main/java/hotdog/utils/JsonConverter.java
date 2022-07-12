@@ -36,7 +36,8 @@ public class JsonConverter {
             e.printStackTrace();
         }
         assert enums != null;
-        jsonList = new ArrayList<>(enums);
+//        jsonList = new ArrayList<>(enums);
+        jsonList = enums.stream().toList();
 
     }
 

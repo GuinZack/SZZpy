@@ -31,11 +31,11 @@ public class Main {
 
         if (cliParser.getPcOrCSV().equals("pc")) {
             minePC();
-            System.exit(1);
+            System.exit(0);
         } else if (cliParser.getPcOrCSV().equals("cpc")) {
             JsonConverter jsonConverter = new JsonConverter();
             jsonConverter.convertObjectToCsv();
-            System.exit(1);
+            System.exit(0);
         }
 
         minePC();
@@ -44,6 +44,7 @@ public class Main {
         pyszzExecutor.runPySZZ(szzOpt);
         System.out.println("Pyszz successfully completed" + "\nConverting output to csv file");
         JsonConverter jsonConverter = new JsonConverter();
+        jsonConverter.convertJsonToObject(System.getProperty("user.dir") + "app/src/main/java/hotdog/CPCMiner/pyszz/out/");
         jsonConverter.convertObjectToCsv();
 
         // clean up objects (remove used files)

@@ -15,8 +15,16 @@ clean:
 	rm -rf runs
 	rm -rf build
 
-PC:
-	./runs/app/bin/app -ip $(args) -wp $(args) -pc
+pc:
+	./runs/app/bin/app -ip $(args1) -wp $(args2) -pc
 
-CPC:
-	./runs/app/bin/app -ip $(args) -wp $(args) -cpc
+cpc:
+	./runs/app/bin/app -ip $(args1) -wp $(args2) -cpc
+
+pipe:
+	make pc
+	make cpc
+
+pyszz:
+	python3 $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/main.py $(CURDIR)/data/PC_list.json $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/conf/agszz.yml $(args)
+

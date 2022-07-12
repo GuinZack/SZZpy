@@ -14,9 +14,10 @@ public class JsonWriter {
 
     public JsonWriter (ArrayList<String> idLIST, String projectName) {
         this.idList = idLIST;
-        this.projectName = projectName;
+        String temp [] = projectName.split("/");
+        this.projectName = temp[temp.length-1];
     }
-
+/*need to be corrected for csv list*/
     public JsonWriter (ArrayList<ArrayList<String>> idLISTs, ArrayList<String> projectNames) {
         this.idLists = idLISTs;
         this.projectNames = projectNames;
@@ -25,7 +26,7 @@ public class JsonWriter {
     public void writeList() {
         savePath = System.getProperty("user.dir");
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "/data/PC_list.json");
+            FileOutputStream fos = new FileOutputStream(savePath + "/data/"+ projectName +"_PC.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
             int i = 0;
@@ -61,7 +62,7 @@ public class JsonWriter {
     public void writeSingle() {
         savePath = System.getProperty("user.dir");
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "/data/PC_list.json");
+            FileOutputStream fos = new FileOutputStream(savePath + "/data/" + projectName + "_PC.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
             int i = 0;
