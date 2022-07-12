@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class JsonConverter {
     private Json json;
     private List<Json> jsonList;
-
+    private String path;
     private class Json {
         public String fix_commit_hash;
         public String repo_name;
@@ -24,6 +24,7 @@ public class JsonConverter {
     }
 
     public void convertJsonToObject (String path) {
+        this.path = path;
         Collection<Json> enums = null;
         try (Reader reader = new FileReader(path)) {
             Gson gson = new Gson();
@@ -40,9 +41,11 @@ public class JsonConverter {
         jsonList = enums.stream().toList();
 
     }
-
+//cpc_ag_projectname.json
     public void convertObjectToCsv () {
-        File file = new File(System.getProperty("user.dir") + "/data/CP_CPC_pair.csv");
+        String temp [] = path.split("_");
+        String fileName = temp[temp.length-1].replace(".json", "");
+        File file = new File(System.getProperty("user.dir") + "/data/pc_cpc_pair_"+ fileName +".csv");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
