@@ -18,13 +18,14 @@ clean:
 pc:
 	./runs/app/bin/app -ip $(ip) -wp $(wp) -pc
 
+pyszz:
+	python3 $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/main.py $(CURDIR)/data/$(pc) $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/conf/rszz.yml $(wp)
+
 cpc:
 	./runs/app/bin/app -ip $(CURDIR)/out/$(ip) -wp $(wp) -cpc
 
 pipe:
-	make pc
-	make cpc
-
-pyszz:
-	python3 $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/main.py $(CURDIR)/data/$(pc) $(CURDIR)/app/src/main/java/hotdog/CPCMiner/pyszz/conf/rszz.yml $(wp)
+	make pc ip=$(url) wp=$(wp)
+	make pyszz pc=$(proj)_PC.json wp=$(wp)
+	make cpc ip=cpc_r_$(proj).json wp=$(wp)
 

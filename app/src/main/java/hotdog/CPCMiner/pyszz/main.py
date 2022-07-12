@@ -107,8 +107,9 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
 
         log.info(f"result: {bug_introducing_commits}")
 
-        if len(bug_introducing_commits) > 0:
-            bugfix_commits[i]["inducing_commit_hash"] = [bic.hexsha for bic in bug_introducing_commits if bic]
+        if len(bug_introducing_commits) > 0 and None not in bug_introducing_commits:
+            bugfix_commits[i]["inducing_commit_hash"] = [(bic, bug_introducing_commits[bic].hexsha) for bic in bug_introducing_commits.keys()
+                                                         if bug_introducing_commits[bic]]
             cpc_pc_pairs.append(bugfix_commits[i])
 
     with open(out_json, 'w') as out:
@@ -145,7 +146,6 @@ if __name__ == "__main__":
 
     json_file_name = re.split("/", input_json)[-1]
     proj_name = re.split("_PC.json", json_file_name)[0]
-    print(proj_name)
     out_json = os.path.join(out_dir, f'cpc_{szz_name}_{proj_name}.json')
 
     if not szz_name:

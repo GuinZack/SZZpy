@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from shutil import copytree
 from enum import Enum
 from shutil import rmtree
-from typing import List, Set
+from typing import List, Set, Dict, AnyStr
 from tempfile import mkdtemp
 import traceback
 from git import Commit, Repo
@@ -90,6 +90,18 @@ class AbstractSZZ(ABC):
 
     @abstractmethod
     def find_bic(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> Set[Commit]:
+        """
+         Abstract main method to find bug introducing commits. To be implemented by the specific SZZ implementation.
+
+        :param str fix_commit_hash: hash of fix commit to scan for buggy commits
+        :param List[ImpactedFile] impacted_files: list of impacted files in fix commit
+        :param **kwargs: optional parameters specific for each SZZ implementation
+        :returns Set[Commit] a set of bug introducing commits candidates, represented by Commit object
+        """
+        pass
+
+    @abstractmethod
+    def find_bic_dict(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> Dict[AnyStr, Set[Commit]]:
         """
          Abstract main method to find bug introducing commits. To be implemented by the specific SZZ implementation.
 
@@ -293,6 +305,33 @@ class ImpactedFile:
 
 
 class BlameData:
+    """ Data class to represent blame data """
+    def __init__(self, commit: Commit, line_num: int, line_str: str, file_path: str):
+        """
+        :param Commit commit: commit detected by git blame
+        :param int line_num: number of the blamed line
+        :param str line_str: content of the blamed line
+        :param str file_path: path of the blamed file
+        :returns BlameData
+        """
+        self.commit = commit
+        self.line_num = line_num
+        self.line_str = line_str
+        self.file_path = file_path
+
+    def __str__(self) -> str:
+        return f'{self.__class__.__name__}(commit={self.commit.hexsha},line_num={self.line_num},file_path="{self.file_path}",line_str="{self.line_str}")'
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return self.file_path == other.file_path and self.line_num == other.line_num
+
+    def __hash__(self) -> int:
+        return 31 * hash(self.line_num) + hash(self.file_path)
+
+
+class BICDict:
     """ Data class to represent blame data """
     def __init__(self, commit: Commit, line_num: int, line_str: str, file_path: str):
         """
