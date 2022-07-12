@@ -36,6 +36,7 @@ public class Main {
             JsonConverter jsonConverter = new JsonConverter();
             jsonConverter.convertJsonToObject(inputPath);
             jsonConverter.convertObjectToCsv();
+            System.out.println("csv file written" + "\nCPMiner completed");
             System.exit(0);
         }
 

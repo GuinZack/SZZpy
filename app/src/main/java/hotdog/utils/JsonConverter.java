@@ -43,7 +43,7 @@ public class JsonConverter {
     }
 //cpc_ag_projectname.json
     public void convertObjectToCsv () {
-        String temp [] = path.split("_");
+        String temp [] = path.split("cpc_r_");
         String fileName = temp[temp.length-1].replace(".json", "");
         File file = new File(System.getProperty("user.dir") + "/data/pc_cpc_pair_"+ fileName +".csv");
         try {
