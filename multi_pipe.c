@@ -13,7 +13,7 @@
 int main(int argc, char *argv[]) {
 
     if (argc != 3) {
-        printf("Usage: ./multi_pipe <input_file> <clone_directory>\n");
+        printf("Usage: %s <input_file> <clone_directory>\n",argv[0]);
         exit(1);
     }
     int csv_count = 0;
@@ -22,7 +22,6 @@ int main(int argc, char *argv[]) {
     char url[50];
     FILE* fp;
     fp = fopen(input_path, "r");
-    pid_t pid;
 
     if (NULL == fp) {
         printf("file can't be opened \n");
@@ -37,19 +36,34 @@ int main(int argc, char *argv[]) {
     fp2 = fopen(input_path, "r");
     for(int i = 0; i < csv_count; i++) {
         fgets(url, 100, fp2);
-        pid = fork();
-        printf("%d", 1);
+        if (url[strlen(url)-1] == '\n')
+                url[strlen(url)-1] = '\0';
+        char temp [50];
+        strcpy(temp, url);
+        pid_t pid = fork();
         if (pid == 0) {
-            printf("%d", 1);
-            char * token = strtok(url, "/");
-            char * proj_name;
-            while( token != NULL ) {
-                token = strtok(NULL, "/");
-                strcpy(proj_name, token);
-            }
+            
+            char * token = strtok(temp, "/");
+            token = strtok(NULL, "/");
+            token = strtok(NULL, "/");
+            token = strtok(NULL, "/");
+            
+            
+            
             
             printf("Executing pipeline for %s\n", url);
-            execl("make", "make","pipe","url=", url,"wp=",clone_path,"proj=",proj_name);
+            char * command = malloc(sizeof(char) * (strlen(clone_path) + strlen(token) + 100));
+            strcpy(command,"make pipe url=");
+            strcat(command, url);
+            strcat(command, " wp=");
+            strcat(command, clone_path);
+            strcat(command, " proj=");
+            strcat(command, token);
+
+            printf("%s\n",command);
+            int r = system(command);
+            return r;
+            //execl("/Users/leechanggong/Project/KISTI2022/CPMiner/makefile", "make","pipe","url=", url,"wp=",clone_path,"proj=",token, NULL);
             exit(0);
         } else if (pid < 0) {
             printf("fork failed\n");
