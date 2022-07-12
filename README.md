@@ -33,6 +33,18 @@ make build
 make run args="<flag1> <argument1> <flag2> <argument2> ..."
 ```
 
+#### Java spawning pyszz takes a lot slower.
+
+Instead, we made shell commands to run the program partially in sequential order.
+
+```
+make pipe url="<GitHub URL>" wp="<clone directory>" proj="<Github project name>"
+```
+
+This command runs `make pc` command, `make pyszz` and `make cpc`
+
+Please, go over makefile for detail.
+
 ### Options
 
 `-ip` input path: it could be URL of a github repo or simple csv file containing list of URLs.
