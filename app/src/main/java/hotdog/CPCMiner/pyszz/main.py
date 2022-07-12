@@ -2,6 +2,7 @@ from functools import cmp_to_key
 import json
 import logging as log
 import os
+import re
 import sys
 import dateparser
 from time import time as ts
@@ -141,7 +142,11 @@ if __name__ == "__main__":
     out_dir = 'out'
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
-    out_json = os.path.join(out_dir, f'bic_{szz_name}_{int(ts())}.json')
+
+    json_file_name = re.split("/", input_json)[-1]
+    proj_name = re.split("_PC.json", json_file_name)[0]
+    print(proj_name)
+    out_json = os.path.join(out_dir, f'cpc_{szz_name}_{proj_name}.json')
 
     if not szz_name:
         log.error('The configuration file does not define the SZZ name. Please, fix.')
