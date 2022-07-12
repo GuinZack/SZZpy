@@ -37,8 +37,8 @@ public class JsonConverter {
             e.printStackTrace();
         }
         assert enums != null;
-//        jsonList = new ArrayList<>(enums);
-        jsonList = enums.stream().toList();
+        jsonList = new ArrayList<>(enums);
+//        jsonList = enums.stream().toList();
 
     }
 //cpc_ag_projectname.json
