@@ -56,7 +56,7 @@ This will generate multiple processes run at the same time.
 
 `-wp` working path: it is a path for cloning github repo.
 
-`-l` log: giving this option lets it leave a log file at` data` directory.
+`-l` log: giving this option lets it leave a log file at `data` directory.
 
 
 If you want to run the pyszz separately (settings are different from the original) use following command
