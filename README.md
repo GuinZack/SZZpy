@@ -3,11 +3,6 @@
 Chnage-Prone Mining Tool built based on the approach introduced in Evaluating SZZ Implementations Through a Developer-informed Oracle (https://github.com/grosa1/pyszz)
 
 (* algorithm used in this tool is similar but also quite different from the original pyszz leading different results)
----
-## version control
-pyszz
-
----
 ## Installation
 
 To run PySZZ you need:
