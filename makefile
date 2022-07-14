@@ -28,4 +28,5 @@ pipe:
 	make pc ip=$(url) wp=$(wp)
 	make pyszz proj=$(proj) wp=$(wp)
 	make cpc ip=$(proj)
+	rm -rf runs
 
