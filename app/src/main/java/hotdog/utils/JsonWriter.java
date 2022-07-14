@@ -24,11 +24,15 @@ public class JsonWriter {
     }
 
     public void writeList() {
-        savePath = System.getProperty("user.dir");
+        String os = System.getProperty("os.name");
+        if (os.indexOf("mac") >= 0)
+            savePath = System.getProperty("user.dir") + "/data/";
+        else
+            savePath = "/data/CGYW/CPMiner/pc/";
         String temp [] = projectName.split("/");
         String name = temp[temp.length-1];
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "/data/"+ name +"_PC.json");
+            FileOutputStream fos = new FileOutputStream(savePath + name +"_pc.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
             int i = 0;

@@ -2,6 +2,7 @@ from functools import cmp_to_key
 import json
 import logging as log
 import os
+import platform
 import re
 import sys
 import dateparser
@@ -140,13 +141,17 @@ if __name__ == "__main__":
     log.info(f"parsed conf yml: {conf}")
     szz_name = conf['szz_name']
 
-    out_dir = 'out'
+    os = platform.system()
+    if os == 'Darwin':
+        out_dir = 'out'
+    else:
+        out_dir = '/data/CGYW/CPMiner/cpc'
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
 
     json_file_name = re.split("/", input_json)[-1]
-    proj_name = re.split("_PC.json", json_file_name)[0]
-    out_json = os.path.join(out_dir, f'cpc_{szz_name}_{proj_name}.json')
+    proj_name = re.split("_pc.json", json_file_name)[0]
+    out_json = os.path.join(out_dir, f'{proj_name}_cpc.json')
 
     if not szz_name:
         log.error('The configuration file does not define the SZZ name. Please, fix.')

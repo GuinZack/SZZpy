@@ -17,11 +17,10 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     int csv_count = 0;
-    char * input_path = argv[1];
-    char * clone_path = argv[2];
-    char url[50];
+    char url[100];
+
     FILE* fp;
-    fp = fopen(input_path, "r");
+    fp = fopen(argv[1], "r");
 
     if (NULL == fp) {
         printf("file can't be opened \n");
@@ -32,38 +31,35 @@ int main(int argc, char *argv[]) {
         csv_count++;
     }
     fclose(fp);
+
     FILE* fp2;
-    fp2 = fopen(input_path, "r");
+    fp2 = fopen(argv[1], "r");
     for(int i = 0; i < csv_count; i++) {
         fgets(url, 100, fp2);
-        if (url[strlen(url)-1] == '\n')
-                url[strlen(url)-1] = '\0';
-        char temp [50];
-        strcpy(temp, url);
         pid_t pid = fork();
         if (pid == 0) {
+            char temp [50];
+            if (url[strlen(url)-1] == '\n') strncpy(temp, url, strlen(url)-2);
+            else strcpy(temp, url);
+            printf("Executing pipeline for %s\n", temp);
+            char command[1000];
+            strcpy(command,"make pipe url=");
+            strcat(command, temp);
+            strcat(command, " wp=");
+            strcat(command, argv[2]);
             
             char * token = strtok(temp, "/");
             token = strtok(NULL, "/");
             token = strtok(NULL, "/");
             token = strtok(NULL, "/");
             
-            
-            
-            
-            printf("Executing pipeline for %s\n", url);
-            char * command = malloc(sizeof(char) * (strlen(clone_path) + strlen(token) + 100));
-            strcpy(command,"make pipe url=");
-            strcat(command, url);
-            strcat(command, " wp=");
-            strcat(command, clone_path);
             strcat(command, " proj=");
             strcat(command, token);
 
-            printf("%s\n",command);
+            printf("%s\n\n",command);
             int r = system(command);
             return r;
-            //execl("/Users/leechanggong/Project/KISTI2022/CPMiner/makefile", "make","pipe","url=", url,"wp=",clone_path,"proj=",token, NULL);
+        
             exit(0);
         } else if (pid < 0) {
             printf("fork failed\n");
@@ -73,7 +69,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-      fclose(fp2);
+    fclose(fp2);
     for (int i = 0; i < csv_count; i++) {
         wait(NULL);
     }
