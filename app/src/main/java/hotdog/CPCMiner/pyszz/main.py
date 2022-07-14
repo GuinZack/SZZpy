@@ -127,9 +127,22 @@ if __name__ == "__main__":
     input_json = sys.argv[1]
     conf_file = sys.argv[2]
     repos_dir = sys.argv[3] if len(sys.argv) > 3 else None
+    proj_name = re.split("_pc.json", input_json)[0]
+
+    if platform.system() == 'Darwin':
+        input_json = '_PC/' + sys.argv[1]
+        out_dir = '_CPC'
+    else:
+        input_json = '/data/CGYW/CPMiner/_PC/' + sys.argv[1]
+        out_dir = '/data/CGYW/CPMiner/_CPC'
+
+    if not os.path.isdir(out_dir):
+        os.makedirs(out_dir)
+
+    out_json = os.path.join(out_dir, f'{proj_name}_cpc.json')
 
     if not os.path.isfile(input_json):
-        log.error('invalid input json')
+        log.error('invalid input json', f'{input_json}')
         exit(-2)
     if not os.path.isfile(conf_file):
         log.error('invalid conf file')
@@ -141,21 +154,11 @@ if __name__ == "__main__":
     log.info(f"parsed conf yml: {conf}")
     szz_name = conf['szz_name']
 
-    os = platform.system()
-    if os == 'Darwin':
-        out_dir = 'out'
-    else:
-        out_dir = '/data/CGYW/CPMiner/cpc'
-    if not os.path.isdir(out_dir):
-        os.makedirs(out_dir)
-
-    json_file_name = re.split("/", input_json)[-1]
-    proj_name = re.split("_pc.json", json_file_name)[0]
-    out_json = os.path.join(out_dir, f'{proj_name}_cpc.json')
-
     if not szz_name:
         log.error('The configuration file does not define the SZZ name. Please, fix.')
         exit(-3)
+
+
     
     #log.info(f'Launching {szz_name}-szz')
 

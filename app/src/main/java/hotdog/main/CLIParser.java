@@ -14,7 +14,7 @@ public class CLIParser {
     private String szzOption = "r";
     private boolean log;
     private boolean help;
-    private String pcOrCSV;
+    private String pcOrcpc;
 
     public CLIParser (String[] args) {
         Options options = createOptions();
@@ -29,7 +29,7 @@ public class CLIParser {
     public String getWorkPath() { return workPath; }
     public String getSzzOption() { return szzOption; }
     public boolean getLog() { return log; }
-    public String getPcOrCSV () { return pcOrCSV; }
+    public String getPcOrCpc () { return pcOrcpc; }
 
     private boolean parseOptions(Options options, String[] args) {
         CommandLineParser parser = new DefaultParser();
@@ -39,9 +39,9 @@ public class CLIParser {
             workPath = cmd.getOptionValue("wp");
             szzOption = cmd.getOptionValue("szz");
             log = cmd.hasOption("l");
-            if (cmd.hasOption("pc")) pcOrCSV = "pc";
-            else if (cmd.hasOption("cpc")) pcOrCSV = "cpc";
-            else pcOrCSV = null;
+            if (cmd.hasOption("pc")) pcOrcpc = "pc";
+            else if (cmd.hasOption("cpc")) pcOrcpc = "cpc";
+            else pcOrcpc = null;
             help = cmd.hasOption("h");
 
         } catch (Exception e) {
@@ -68,7 +68,6 @@ public class CLIParser {
                 .desc("Set a path of a directory of a cloned project, or a path of a working directory")
                 .hasArg()
                 .argName("Local path")
-                .required()
                 .build());
 
         options.addOption(Option.builder("szz").longOpt("szzOption")

@@ -12,6 +12,7 @@ public class JsonConverter {
     private Json json;
     private List<Json> jsonList;
     private String path;
+    private String savePath;
     private class Json {
         public String fix_commit_hash;
         public String repo_name;
@@ -21,12 +22,16 @@ public class JsonConverter {
     public JsonConverter() {
         // path to directory where Json will be stored
         json = new Json();
+        if (System.getProperty("os.name").toLowerCase().contains("mac"))
+            savePath = System.getProperty("user.dir");
+        else
+            savePath = "/data/CGYW/CPMiner";
     }
 
     public void convertJsonToObject (String path) {
         this.path = path;
         Collection<Json> enums = null;
-        try (Reader reader = new FileReader(path)) {
+        try (Reader reader = new FileReader(savePath + "/_CPC/" +path)) {
             Gson gson = new Gson();
             // Convert JSON File to Java Object
 //            json = gson.fromJson(reader, Json.class);
@@ -41,11 +46,13 @@ public class JsonConverter {
 //        jsonList = enums.stream().toList();
 
     }
-//cpc_ag_projectname.json
+//projectname_cpc.json
     public void convertObjectToCsv () {
-        String temp [] = path.split("cpc_r_");
-        String fileName = temp[temp.length-1].replace(".json", "");
-        File file = new File(System.getProperty("user.dir") + "/out/pc_cpc_pair_"+ fileName +".csv");
+        String fileName [] = path.split("_cpc.json");
+        savePath += "/_PC_CPC/";
+        if (!new File(savePath).exists())
+            new File(savePath).mkdir();
+        File file = new File(savePath + fileName[0] +"_pc_cpc.csv");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);

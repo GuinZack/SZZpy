@@ -29,14 +29,14 @@ public class Main {
         this.szzOpt = cliParser.getSzzOption();
         boolean isLog = cliParser.getLog();
 
-        if (cliParser.getPcOrCSV().equals("pc")) {
+        if (cliParser.getPcOrCpc().equals("pc")) {
             minePC();
             System.exit(0);
-        } else if (cliParser.getPcOrCSV().equals("cpc")) {
+        } else if (cliParser.getPcOrCpc().equals("cpc")) {
             JsonConverter jsonConverter = new JsonConverter();
-            jsonConverter.convertJsonToObject(inputPath);
+            jsonConverter.convertJsonToObject(inputPath); // inputPath = (proj_name)_cpc.json
             jsonConverter.convertObjectToCsv();
-            System.out.println("csv file written" + "\nCPMiner completed");
+            System.out.println("csv file written" + "\nCPMiner completed\n");
             System.exit(0);
         }
 
@@ -78,6 +78,6 @@ public class Main {
             JsonWriter jsonWriter = new JsonWriter(commitIDSingle,commitMiner.getMatcherGroup());
             jsonWriter.writeSingle();
         }
-        System.out.println("Post Changes(PC) json file successfully written");
+        System.out.println("Post Changes(PC) json file successfully written\n");
     }
 }

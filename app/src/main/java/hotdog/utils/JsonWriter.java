@@ -1,9 +1,11 @@
 package hotdog.utils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class JsonWriter {
     private ArrayList<String> idList = null;
@@ -24,14 +26,16 @@ public class JsonWriter {
     }
 
     public void writeList() {
-        String os = System.getProperty("os.name");
-        if (os.indexOf("mac") >= 0)
-            savePath = System.getProperty("user.dir") + "/data/";
+        if (System.getProperty("os.name").toLowerCase().contains("mac"))
+            savePath = System.getProperty("user.dir") + "/_PC/";
         else
-            savePath = "/data/CGYW/CPMiner/pc/";
+            savePath = "/data/CGYW/CPMiner/_PC/";
+        if (!new File(savePath).exists())
+            new File(savePath).mkdir();
         String temp [] = projectName.split("/");
         String name = temp[temp.length-1];
         try {
+
             FileOutputStream fos = new FileOutputStream(savePath + name +"_pc.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
@@ -66,11 +70,16 @@ public class JsonWriter {
     }
 
     public void writeSingle() {
-        savePath = System.getProperty("user.dir");
+        if (System.getProperty("os.name").toLowerCase().contains("mac"))
+            savePath = System.getProperty("user.dir") + "/_PC/";
+        else
+            savePath = "/data/CGYW/CPMiner/_PC/";
+        if (!new File(savePath).exists())
+            new File(savePath).mkdir();
         String temp [] = projectName.split("/");
         String name = temp[temp.length-1];
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "/data/" + name + "_PC.json");
+            FileOutputStream fos = new FileOutputStream(savePath + name + "_pc.json");
             PrintWriter out = new PrintWriter(fos);
             out.println("[");
             int i = 0;
