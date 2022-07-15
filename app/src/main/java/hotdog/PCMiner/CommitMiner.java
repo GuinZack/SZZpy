@@ -28,7 +28,7 @@ public class CommitMiner {
 
         String[] dirs = cloneInfo.split("/");
 
-        cd(wp); //   "/Users/leechanggong/Desktop/Exp/" , "/data/CGYW/clones/"
+        cd(wp);
         build(dirs[0]);
         cd (dirs[0]);
         clone(URL);

@@ -1,6 +1,4 @@
-﻿Project name,,Github
-django,,https://github.com/django/django
-scikit-learn,,https://github.com/scikit-learn/scikit-learn
-spaCy,,https://github.com/explosion/spaCy
-face_recognition,,https://github.com/ageitgey/face_recognition
-faceswap,,https://github.com/deepfakes/faceswap
+﻿https://github.com/django/django,,
+https://github.com/scikit-learn/scikit-learn,,
+https://github.com/explosion/spaCy,,
+https://github.com/deepfakes/faceswap,,
