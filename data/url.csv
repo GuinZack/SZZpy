@@ -1,13 +1,13 @@
-https://github.com/tensorflow/tensorflow
-https://github.com/huggingface/transformers
-https://github.com/pytorch/pytorch
-https://github.com/keras-team/keras
-https://github.com/josephmisiti/awesome-machine-learning
-https://github.com/scikit-learn/scikit-learn
-https://github.com/tesseract-ocr/tesseract
-https://github.com/ageitgey/face_recognition
-https://github.com/deepfakes/faceswap
-https://github.com/explosion/spaCy
-https://github.com/fastai/fastai
-https://github.com/photoprism/photoprism
-https://github.com/ray-project/ray
+https://github.com/tensorflow/tensorflow,,,,,tag: machine-learning
+https://github.com/huggingface/transformers,,,,,
+https://github.com/pytorch/pytorch,,,,,
+https://github.com/keras-team/keras,,,,,
+https://github.com/josephmisiti/awesome-machine-learning,,,,,
+https://github.com/scikit-learn/scikit-learn,,,,,
+https://github.com/tesseract-ocr/tesseract,,,,,
+https://github.com/ageitgey/face_recognition,,,,,
+https://github.com/deepfakes/faceswap,,,,,
+https://github.com/explosion/spaCy,,,,,
+https://github.com/fastai/fastai,,,,,
+https://github.com/photoprism/photoprism,,,,,
+https://github.com/ray-project/ray,,,,,
