@@ -39,7 +39,11 @@ dependencies {
 
 }
 
-application {
+//application {
     // Define the main class for the application.
-    mainClass = 'hotdog.main.Main'
-}
+//    mainClass = 'hotdog.main.Main'
+//}
+
+apply plugin: 'application'
+mainClassName = "hotdog.main.Main"
+
