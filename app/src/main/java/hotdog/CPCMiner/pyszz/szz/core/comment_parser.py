@@ -32,8 +32,7 @@ def parse_comments_srcml(file_str: str, file_name: str, temp_folder: str = tempf
             os.makedirs(temp_folder)
 
         file_name = os.path.join(temp_folder, 'temp_' + file_name)
-        #with open(file_name, 'w') as temp_file:
-        with file_name.TemporaryFile() as temp_file:
+        with open(file_name, 'w') as temp_file:
             temp_file.write(file_str)
 
         process_out = list()
