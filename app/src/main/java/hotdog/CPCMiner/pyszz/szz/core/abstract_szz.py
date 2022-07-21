@@ -9,7 +9,7 @@ from typing import List, Set, Dict, AnyStr
 from tempfile import mkdtemp
 import traceback
 from git import Commit, Repo
-from pydriller import ModificationType, GitRepository as PyDrillerGitRepo
+from pydriller import ModificationType, Git as PyDrillerGitRepo
 
 from .comment_parser import parse_comments
 
@@ -129,7 +129,7 @@ class AbstractSZZ(ABC):
         impacted_files = list()
 
         fix_commit = PyDrillerGitRepo(self.repository_path).get_commit(fix_commit_hash)
-        for mod in fix_commit.modifications:
+        for mod in fix_commit.modified_files:
             # skip newly added files
             if not mod.old_path:
                 continue
@@ -156,7 +156,7 @@ class AbstractSZZ(ABC):
             if len(mod_lines) > 0:
                 impacted_files.append(ImpactedFile(file_path, mod_lines))
 
-        log.info([str(f) for f in impacted_files])
+        #log.info([str(f) for f in impacted_files])
 
         return impacted_files
 
