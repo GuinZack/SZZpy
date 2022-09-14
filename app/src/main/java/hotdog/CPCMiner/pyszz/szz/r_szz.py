@@ -23,7 +23,7 @@ class RSZZ(MASZZ):
         print(bic_candidates)
         if len(bic_candidates) > 0:
             for file in bic_candidates.keys():
-                _bic_candidates = bic_candidates.get(file)
+                _bic_candidates = bic_candidates.get(file).keys()
                 if len(_bic_candidates) > 0:
                     _latest_bic = max(_bic_candidates, key=attrgetter('committed_date'))
                     #bic = {file: {_latest_bic : [for commit in bic_candidates.get(file) if commit == _latest_bic]bic_candidates.get(file).get(_latest_bic)}}
