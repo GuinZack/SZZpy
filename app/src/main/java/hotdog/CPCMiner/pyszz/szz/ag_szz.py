@@ -194,6 +194,6 @@ class AGSZZ(AbstractSZZ):
             bic = [c for c in bic if c.authored_date <= kwargs['issue_date']]
             log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
         else:
-            log.info("Not filtering by issue date.")
+            #log.info("Not filtering by issue date.")
 
         return bic

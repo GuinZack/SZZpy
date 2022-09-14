@@ -56,10 +56,12 @@ public class JsonConverter {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
-            out.println("RepoName,CPC,PC,FilePath");
+            out.println("RepoName,CPC,PC,FilePath,line");
             for (Json j : jsonList) {
                 for (Object tuple : j.inducing_commit_hash) {
-
+                    // Ex. "inducing_commit_hash": [["face_recognition/api.py",
+                    //                              "99641c5052a944e887fb786983e5575301c604a2",
+                    //                              ["return np.linalg.norm(faces - face_to_compare, axis=1)"]]
                     String [] path_hash = tuple.toString().split(", ");
                     path_hash[0] = path_hash[0].replace("[","");
                     path_hash[1] = path_hash[1].replace("]","");
