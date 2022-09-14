@@ -214,7 +214,7 @@ class AbstractSZZ(ABC):
                 source_file_content = self.repository.git.show(f"{entry.commit.hexsha}:{entry.orig_path}")
                 line_str = source_file_content.split('\n')[line_num - 1].strip()
 
-                if len(line_str) < 0:
+                if len(line_str) < 1:
                     continue
                 b_data = BlameData(entry.commit, line_num, line_str, entry.orig_path)
 
