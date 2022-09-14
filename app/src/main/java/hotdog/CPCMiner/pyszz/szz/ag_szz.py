@@ -183,7 +183,7 @@ class AGSZZ(AbstractSZZ):
         for file in blame_data.keys():
             for bd in blame_data[file].keys():
                 if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size):
-                    if file in bic.keys():
+                    if file in bic[file].keys():
                         bic[file].update({bd.commit : blame_data[file][bd]})
                     else :
                         _set = {bd.commit : blame_data[file][bd]}
