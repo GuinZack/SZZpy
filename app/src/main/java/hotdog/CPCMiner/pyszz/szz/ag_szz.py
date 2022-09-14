@@ -187,7 +187,7 @@ class AGSZZ(AbstractSZZ):
                         bic[file].update({bd.commit : blame_data[file][bd]})
                     else :
                         _set = set()
-                        _set.add({bd.commit : blame_data[file][bd]})
+                        _set.add({bd.commit : frozenset(blame_data[file][bd].items())})
                         bic[file] = _set
 
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
