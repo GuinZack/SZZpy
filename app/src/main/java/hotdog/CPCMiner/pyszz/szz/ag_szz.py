@@ -195,5 +195,5 @@ class AGSZZ(AbstractSZZ):
             log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
         else:
             #log.info("Not filtering by issue date.")
-
+        
         return bic
