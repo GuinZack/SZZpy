@@ -64,7 +64,8 @@ public class JsonConverter {
                     //                              ["return np.linalg.norm(faces - face_to_compare, axis=1)"]]
                     String [] path_hash = tuple.toString().split(", ");
                     path_hash[0] = path_hash[0].replace("[",""); // FilePath
-                    path_hash[2] = path_hash[2].replace("]",""); // Line
+                    path_hash[2] = path_hash[2].replace("]","")
+                                                .replace("[", ""); // Line
                     out.println(j.repo_name + "," + path_hash[1] + "," + j.fix_commit_hash + ","
                                     + path_hash[0] + "," + path_hash[2]);
                 }
