@@ -20,11 +20,10 @@ class RSZZ(MASZZ):
     def find_bic(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> Dict[AnyStr, Set[Commit]]:
         bic_candidates = super().find_bic_dict(fix_commit_hash, impacted_files, **kwargs)
         latest_bic = dict()
-        bic_candidates = list(bic_candidates)
         if len(bic_candidates) > 0:
-            for item in bic_candidates:
-                for file in item.keys():
-                    _bic_candidates = bic_candidates.get(file).keys()
+            for file in bic_candidates.keys():
+                for _bic_dict in bic_candidates.get(file):
+                    _bic_candidates = _bic_dict.keys()
                     if len(_bic_candidates) > 0:
                         _latest_bic = max(_bic_candidates, key=attrgetter('committed_date'))
                         bic = {file: {_latest_bic : bic_candidates.get(file).get(_latest_bic)}}
