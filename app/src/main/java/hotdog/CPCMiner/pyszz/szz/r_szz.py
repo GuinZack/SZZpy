@@ -20,12 +20,13 @@ class RSZZ(MASZZ):
     def find_bic(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> Dict[AnyStr, Set[Commit]]:
         bic_candidates = super().find_bic_dict(fix_commit_hash, impacted_files, **kwargs)
         latest_bic = dict()
+        print(bic_candidates)
         if len(bic_candidates) > 0:
             for file in bic_candidates.keys():
                 _bic_candidates = bic_candidates.get(file)
                 if len(_bic_candidates) > 0:
                     _latest_bic = max(_bic_candidates, key=attrgetter('committed_date'))
-                    bic = {file: {_latest_bic : bic_candidates.get(file).get(_latest_bic)}}
+                    #bic = {file: {_latest_bic : [for commit in bic_candidates.get(file) if commit == _latest_bic]bic_candidates.get(file).get(_latest_bic)}}
                     latest_bic.update(bic)
                     log.info(f"selected bug introducing commit: {_latest_bic.hexsha}")
 
