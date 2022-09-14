@@ -184,10 +184,9 @@ class AGSZZ(AbstractSZZ):
             for bd in blame_data[file].keys():
                 if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size):
                     if file in bic.keys():
-                        bic[file].append({bd.commit : blame_data[file][bd]})
+                        bic[file] = bic[file] + {bd.commit : blame_data[file][bd]}
                     else :
-                        _set = tuple()
-                        _set.append({bd.commit : blame_data[file][bd]})
+                        _set = tuple({bd.commit : blame_data[file][bd]})
                         bic[file] = _set
 
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
