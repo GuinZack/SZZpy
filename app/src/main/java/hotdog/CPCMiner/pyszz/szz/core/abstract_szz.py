@@ -213,6 +213,9 @@ class AbstractSZZ(ABC):
             for line_num in entry.orig_linenos:
                 source_file_content = self.repository.git.show(f"{entry.commit.hexsha}:{entry.orig_path}")
                 line_str = source_file_content.split('\n')[line_num - 1].strip()
+
+                if len(line_str) < 0:
+                    continue
                 b_data = BlameData(entry.commit, line_num, line_str, entry.orig_path)
 
                 if skip_comments and self._is_comment(line_num, source_file_content, ntpath.basename(b_data.file_path)):
@@ -220,6 +223,7 @@ class AbstractSZZ(ABC):
                     continue
 
                 log.info(b_data)
+
                 if b_data in bug_introd_commits:
                     bug_introd_commits[b_data].append(line_str)
                 else:
