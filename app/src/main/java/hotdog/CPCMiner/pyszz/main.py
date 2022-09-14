@@ -109,8 +109,9 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
         log.info(f"result: {bug_introducing_commits}")
 
         if len(bug_introducing_commits) > 0 and None not in bug_introducing_commits:
-            bugfix_commits[i]["inducing_commit_hash"] = [(bic, bug_introducing_commits[bic].hexsha) for bic in bug_introducing_commits.keys()
-                                                         if bug_introducing_commits[bic]]
+            for file in bug_introducing_commits.keys():
+                bugfix_commits[i]["inducing_commit_hash"] = [[file, bic, bug_introducing_commits.get(file).get(bic)] 
+                                                                for bic in bug_introducing_commits.get(file).keys() if bic]
             cpc_pc_pairs.append(bugfix_commits[i])
 
     with open(out_json, 'w') as out:

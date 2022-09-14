@@ -50,7 +50,7 @@ class AGSZZ(AbstractSZZ):
                 print(traceback.format_exc())
         return blame_data
 
-    def dict_ag_annotate(self, impacted_files, **kwargs) -> Dict[AnyStr, Set[Commit]]:
+    def dict_ag_annotate(self, impacted_files, **kwargs) -> Dict[AnyStr, Dict[Commit, List]]:
         blame_data = dict()
         for imp_file in impacted_files:
             try:
@@ -161,10 +161,10 @@ class AGSZZ(AbstractSZZ):
             log.info(f"excluding commits: {params['ignore_revs_list']}")
             blame_data = self.dict_ag_annotate(impacted_files, **params)
 
+            # Dict[AnyStr, Dict[Commit, List]]
             new_commits_to_ignore = set()
             for file in blame_data.keys():
-                set_bd = blame_data[file]
-                for bd in set_bd:
+                for bd in blame_data[file].keys():
                     if bd.commit.hexsha not in new_commits_to_ignore:
                         if bd.commit.hexsha not in commits_to_ignore:
                             new_commits_to_ignore.update(
@@ -179,11 +179,16 @@ class AGSZZ(AbstractSZZ):
             commits_to_ignore.update(new_commits_to_ignore)
             params['ignore_revs_list'] = list(commits_to_ignore)
 
-        bic = dict()
+        bic = dict() # Dict[file, Dict[Commit, StringList]]
         for file in blame_data.keys():
-            bic_info = {file: set([bd.commit for bd in blame_data[file] if
-                   bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size)])}
-            bic.update(bic_info)
+            for bd in blame_data[file].keys():
+                if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size):
+                    if file in bic.keys():
+                        bic[file].update({bd.commit : blame_data[file][bd]})
+                    else :
+                        _set = set()
+                        _set.append({bd.commit : blame_data[file][bd]})
+                        bic[file] = _set
 
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
             before = len(bic)

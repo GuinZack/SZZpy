@@ -169,7 +169,7 @@ class AbstractSZZ(ABC):
                ignore_whitespaces: bool = False,
                detect_move_within_file: bool = False,
                detect_move_from_other_files: 'DetectLineMoved' = None
-               ) -> Set['BlameData']:
+               )  -> Dict['BlameData', List]:
         """
          Wrapper for Git blame command.
 
@@ -204,7 +204,7 @@ class AbstractSZZ(ABC):
         if detect_move_from_other_files and detect_move_from_other_files == DetectLineMoved.ANY_COMMIT:
             kwargs['C'] = [True, True, True]
 
-        bug_introd_commits = set()
+        bug_introd_commits = dict()
         mod_line_ranges = self._parse_line_ranges(modified_lines)
         log.info(f"processing file: {file_path}")
         for entry in self.repository.blame_incremental(**kwargs, rev=rev, L=mod_line_ranges, file=file_path):
@@ -220,8 +220,11 @@ class AbstractSZZ(ABC):
                     continue
 
                 log.info(b_data)
-                bug_introd_commits.add(b_data)
-
+                if b_data in bug_introd_commits:
+                    bug_introd_commits[b_data].append(line_str)
+                else:
+                    bug_introd_commits[b_data] = [line_str]
+                
         return bug_introd_commits
 
     def _parse_line_ranges(self, modified_lines: List) -> List[str]:
