@@ -65,7 +65,10 @@ public class JsonConverter {
                     String [] path_hash = tuple.toString().split(", ");
                     path_hash[0] = path_hash[0].replace("[",""); // FilePath
                     System.out.println(path_hash[2]);
-                    path_hash[2] = path_hash[2].substring(path_hash[2].indexOf("[")+1, path_hash[2].lastIndexOf("]")-2); // Line
+                    if (path_hash[2].contains("]"))
+                        path_hash[2] = path_hash[2].substring(path_hash[2].indexOf("[")+1,
+                                                                path_hash[2].lastIndexOf("]")-2); // Line
+                    else path_hash[2] = path_hash[2].substring(1);
                     out.println(j.repo_name + "," + path_hash[1] + "," + j.fix_commit_hash + ","
                                     + path_hash[0] + "," + path_hash[2]);
                 }
