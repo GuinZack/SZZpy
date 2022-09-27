@@ -64,7 +64,6 @@ public class JsonConverter {
                     //                              ["return np.linalg.norm(faces - face_to_compare, axis=1)"]]
                     String [] path_hash = tuple.toString().split(", ");
                     path_hash[0] = path_hash[0].replace("[",""); // FilePath
-                    System.out.println(path_hash[2]);
                     if (path_hash[2].contains("]"))
                         path_hash[2] = path_hash[2].substring(path_hash[2].indexOf("[")+1,
                                                                 path_hash[2].lastIndexOf("]")-2); // Line
