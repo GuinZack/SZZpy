@@ -206,7 +206,7 @@ class AbstractSZZ(ABC):
 
         bug_introd_commits = set()
         mod_line_ranges = self._parse_line_ranges(modified_lines)
-        #log.info(f"processing file: {file_path}")
+        log.info(f"processing file: {file_path}")
         for entry in self.repository.blame_incremental(**kwargs, rev=rev, L=mod_line_ranges, file=file_path):
             # entry.linenos = input lines to blame (current lines)
             # entry.orig_lineno = output line numbers from blame (previous commit lines from blame)
@@ -222,7 +222,7 @@ class AbstractSZZ(ABC):
                     #log.info(f"skip comment line ({line_num}): {line_str}")
                     continue
 
-                #log.info(b_data)
+                log.info(b_data)
                 bug_introd_commits.add(b_data)
                 
         return bug_introd_commits
