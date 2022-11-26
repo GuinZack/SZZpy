@@ -59,7 +59,6 @@ class AGSZZ(AbstractSZZ):
                     skip_comments=True,
                     **kwargs
                 )
-                print(blame_info)
                 if len(blame_info) == 0:
                     continue
                 imp_file_info = {imp_file.file_path: blame_info}
@@ -115,11 +114,11 @@ class AGSZZ(AbstractSZZ):
             commits_to_ignore.update(new_commits_to_ignore)
             params['ignore_revs_list'] = list(commits_to_ignore)
 
-        bic = set([bd.commit for bd in blame_data if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size)])
+        bic = set([bd for bd in blame_data if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size)])
     
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
             before = len(bic)
-            bic = [c for c in bic if c.authored_date <= kwargs['issue_date']]
+            bic = [c for c in bic if c.commit.authored_date <= kwargs['issue_date']]
             #log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
         
         return bic

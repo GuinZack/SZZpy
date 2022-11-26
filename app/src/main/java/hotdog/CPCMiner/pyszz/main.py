@@ -114,19 +114,16 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
             exit(-3)
 
         #log.info(f"result: {bug_introducing_commits}")
-
-        if len(bug_introducing_commits) > 0 and None not in bug_introducing_commits:
-            for file in bug_introducing_commits.keys():
-                bugfix_commits[i]["inducing_commit_hash"] = [[file, bic, bug_introducing_commits.get(file)[1]] 
-                                                                for bic in bug_introducing_commits.get(file)[0] if bic]
-            cpc_pc_pairs.append(bugfix_commits[i])
+        bugfix_commits[i]["inducing_commit_hash"] = [bic.commit.hexsha for bic in bug_introducing_commits if bic]
+        bugfix_commits[i]["inducing_commit_file"] = [bic.file_path for bic in bug_introducing_commits if bic]
+        bugfix_commits[i]["inducing_commit_line"] = [bic.line_str for bic in bug_introducing_commits if bic]
 
     with open(out_json, 'w') as out:
-        json.dump(cpc_pc_pairs, out)
+        json.dump(bugfix_commits, out)
 
     log.info("+++ DONE +++")
 
-
+{'tensorflow/tools/pip_package/setup.py': ['6bf47671443b66a65c4bff41b3ddc8ff9c00dbb8', ["_VERSION = '2.10.0'"]]}
 if __name__ == "__main__":
     if (len(sys.argv) > 0 and '--help' in sys.argv[1]) or len(sys.argv) < 6:
         print('USAGE: python main.py <bugfix_commits.json> <conf_file path> <repos_directory> <size> <index>')
