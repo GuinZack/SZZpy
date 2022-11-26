@@ -13,7 +13,7 @@ class RSZZ(MASZZ):
     Recent-SZZ implementation.
     """
 
-    def __init__(self, repo_full_name: str, repo_url: str, repos_dir: str = None):
+    def __init__(self, repo_full_name: str, repo_url: str, repos_dir: str):
         super().__init__(repo_full_name, repo_url, repos_dir)
 
     # TODO: add parse and type check on kwargs

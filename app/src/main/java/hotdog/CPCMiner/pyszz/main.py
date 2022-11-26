@@ -26,7 +26,6 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
         bugfix_commits = json.loads(in_file.read())
 
     tot = len(bugfix_commits)
-    cpc_pc_pairs = []
     start_idx = int(index) * int(size)
     end_idx = (int(index) + 1) * int(size)
     # enumerate: latest commit to initial commit
