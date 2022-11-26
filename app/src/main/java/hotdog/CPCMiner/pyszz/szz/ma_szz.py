@@ -13,7 +13,7 @@ class MASZZ(AGSZZ):
     Meta-Change-Aware-SZZ implementation.
     """
 
-    def __init__(self, repo_full_name: str, repo_url: str, repos_dir: str = None):
+    def __init__(self, repo_full_name: str, repo_url: str, repos_dir: str):
         super().__init__(repo_full_name, repo_url, repos_dir)
         self.__changes_to_ignore = [
             ModificationType.RENAME,
@@ -33,7 +33,7 @@ class MASZZ(AGSZZ):
 
     def get_meta_changes(self, commit_hash: str, current_file: str) -> Set[str]:
         meta_changes = set()
-        repo_mining = Repository(path_to_repo=self.repository_path, single=commit_hash).traverse_commits()
+        repo_mining = Repository(path_to_repo=self.repos_dir, single=commit_hash).traverse_commits()
         for commit in repo_mining:
             show_str = self.repository.git.show(commit.hash, '--summary').splitlines()
             if show_str and self._is_git_mode_change(show_str, current_file):
@@ -46,19 +46,19 @@ class MASZZ(AGSZZ):
                             log.info(f'exclude meta-change ({m.change_type}): {current_file} {commit.hash}')
                             meta_changes.add(commit.hash)
                 except Exception as e:
-                    log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
+                    log.error(f'unable to analyze commit: {self.repos_dir} {commit.hash}')
 
         return meta_changes
 
     def get_merge_commits(self, commit_hash: str) -> Set[str]:
         merge = set()
-        repo_mining = Repository(single=commit_hash, path_to_repo=self.repository_path).traverse_commits()
+        repo_mining = Repository(single=commit_hash, path_to_repo=self.repos_dir).traverse_commits()
         for commit in repo_mining:
             try:
                 if commit.merge:
                     merge.add(commit.hash)
             except Exception as e:
-                log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
+                log.error(f'unable to analyze commit: {self.repos_dir} {commit.hash}')
 
         if len(merge) > 0:
             log.info(f'merge commits count: {len(merge)}')
