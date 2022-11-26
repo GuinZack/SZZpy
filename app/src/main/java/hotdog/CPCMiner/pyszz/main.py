@@ -7,6 +7,7 @@ import re
 import sys
 import dateparser
 from time import time as ts
+from datetime import datetime
 
 import yaml
 
@@ -22,6 +23,7 @@ log.getLogger('pydriller').setLevel(log.WARNING)
 
 
 def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int, index: int):
+    start_time = datetime.now()
     with open(input_json, 'r') as in_file:
         bugfix_commits = json.loads(in_file.read())
 
@@ -121,6 +123,10 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
         json.dump(bugfix_commits, out)
 
     log.info("+++ DONE +++")
+    end_time = datetime.now()
+    log.info(f"Start time: {start_time}")
+    log.info(f"End time: {end_time}")
+    log.info(f"Total time: {end_time - start_time}")
 
 if __name__ == "__main__":
     if (len(sys.argv) > 0 and '--help' in sys.argv[1]) or len(sys.argv) < 6:
