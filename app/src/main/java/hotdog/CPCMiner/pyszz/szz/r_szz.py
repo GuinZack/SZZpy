@@ -27,7 +27,7 @@ class RSZZ(MASZZ):
                     _latest_bic = max(_bic_candidates, key=attrgetter('committed_date'))
                     for key in bic_candidates.get(file).keys():
                         if key == _latest_bic:
-                            bic = {file: {_latest_bic.hexsha : bic_candidates.get(file).get(key)}}
+                            bic = {file: [_latest_bic.hexsha, bic_candidates.get(file).get(key)]}
                             latest_bic.update(bic)
                             print(bic)
                     #log.info(f"selected bug introducing commit: {_latest_bic.hexsha}")

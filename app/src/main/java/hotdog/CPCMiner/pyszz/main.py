@@ -117,8 +117,8 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
 
         if len(bug_introducing_commits) > 0 and None not in bug_introducing_commits:
             for file in bug_introducing_commits.keys():
-                bugfix_commits[i]["inducing_commit_hash"] = [[file, bic, bug_introducing_commits.get(file).get(bic)] 
-                                                                for bic in bug_introducing_commits.get(file).keys() if bic]
+                bugfix_commits[i]["inducing_commit_hash"] = [[file, bic, bug_introducing_commits.get(file)[1]] 
+                                                                for bic in bug_introducing_commits.get(file)[0] if bic]
             cpc_pc_pairs.append(bugfix_commits[i])
 
     with open(out_json, 'w') as out:
