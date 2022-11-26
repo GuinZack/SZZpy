@@ -42,6 +42,7 @@ class AGSZZ(AbstractSZZ):
                     skip_comments=True,
                     **kwargs
                 )
+                print(blame_info)
                 blame_data.update(blame_info)
             except:
                 print(traceback.format_exc())
