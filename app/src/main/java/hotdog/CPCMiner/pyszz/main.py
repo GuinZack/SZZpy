@@ -122,7 +122,6 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
 
     log.info("+++ DONE +++")
 
-{'tensorflow/tools/pip_package/setup.py': ['6bf47671443b66a65c4bff41b3ddc8ff9c00dbb8', ["_VERSION = '2.10.0'"]]}
 if __name__ == "__main__":
     if (len(sys.argv) > 0 and '--help' in sys.argv[1]) or len(sys.argv) < 6:
         print('USAGE: python main.py <bugfix_commits.json> <conf_file path> <repos_directory> <size> <index>')
