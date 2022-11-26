@@ -88,34 +88,46 @@ class MASZZ(AGSZZ):
         params['ignore_revs_list'] = list()
 
         #log.info("staring blame")
-        to_blame = True
         start = ts()
         blame_data = list()
         commits_to_ignore = set()
-        while to_blame:
-            #log.info(f"excluding commits: {params['ignore_revs_list']}")
-            blame_data = self._ag_annotate(impacted_files, **params)
+        commits_to_ignore_current_file = set()
+        bic = set()
+        for imp_file in impacted_files:
+            commits_to_ignore_current_file = commits_to_ignore.copy()
 
-            new_commits_to_ignore = set()
-            for bd in blame_data:
-                if bd.commit.hexsha not in new_commits_to_ignore:
-                    if bd.commit.hexsha not in commits_to_ignore:
-                        new_commits_to_ignore.update(self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size=max_change_size))
+            to_blame = True
+            while to_blame:
+                #log.info(f"excluding commits: {params['ignore_revs_list']}")
+                blame_data = self._ag_annotate([imp_file], **params)
 
-            if len(new_commits_to_ignore) == 0:
-                to_blame = False
-            elif ts() - start > (60 * 60 * 1):  # 1 hour max time
-                log.error(f"blame timeout for {self.repository_path}")
-                to_blame = False
+                new_commits_to_ignore = set()
+                new_commits_to_ignore_current_file = set()
+                for bd in blame_data:
+                    if bd.commit.hexsha not in new_commits_to_ignore and bd.commit.hexsha not in new_commits_to_ignore_current_file:
+                        if bd.commit.hexsha not in commits_to_ignore_current_file:
+                            new_commits_to_ignore.update(self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size=max_change_size))
+                            new_commits_to_ignore.update(self.get_merge_commits(bd.commit.hexsha))
+                            new_commits_to_ignore_current_file.update(self.get_meta_changes(bd.commit.hexsha, bd.file_path))
 
-            commits_to_ignore.update(new_commits_to_ignore)
-            params['ignore_revs_list'] = list(commits_to_ignore)
+                if len(new_commits_to_ignore) == 0 and len(new_commits_to_ignore_current_file) == 0:
+                    to_blame = False
+                elif ts() - start > (60 * 60 * 1):  # 1 hour max time
+                    log.error(f"blame timeout for {self.repository_path}")
+                    to_blame = False
 
-        bic = set([bd for bd in blame_data if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size)])
-    
+                commits_to_ignore.update(new_commits_to_ignore)
+                commits_to_ignore_current_file.update(commits_to_ignore)
+                commits_to_ignore_current_file.update(new_commits_to_ignore_current_file)
+                params['ignore_revs_list'] = list(commits_to_ignore_current_file)
+
+            bic.update(set([bd for bd in blame_data if bd.commit.hexsha not in self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size)]))
+            
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
             before = len(bic)
-            bic = [c for c in bic if c.commit.authored_date <= kwargs['issue_date']]
-            #log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
-        
+            bic = [c for c in bic if c.authored_date <= kwargs['issue_date']]
+            log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
+        else:
+            log.info("Not filtering by issue date.")
+
         return bic
