@@ -42,7 +42,6 @@ class AGSZZ(AbstractSZZ):
                     skip_comments=True,
                     **kwargs
                 )
-                print(blame_info)
                 blame_data.update(blame_info)
             except:
                 print(traceback.format_exc())
@@ -60,6 +59,7 @@ class AGSZZ(AbstractSZZ):
                     skip_comments=True,
                     **kwargs
                 )
+                print(blame_info)
                 if len(blame_info) == 0:
                     continue
                 imp_file_info = {imp_file.file_path: blame_info}
