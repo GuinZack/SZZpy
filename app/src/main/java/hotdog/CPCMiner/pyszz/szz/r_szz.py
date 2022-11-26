@@ -23,10 +23,10 @@ class RSZZ(MASZZ):
         latest_bic = None
         if len(bic_candidates) > 0:
             latest_bic_commit = max(bic_candidates_commit, key=attrgetter('committed_date'))
-        for bd in bic_candidates:
-            if bd.commit == latest_bic_commit:
-                latest_bic = bd
-                break
+            for bd in bic_candidates:
+                if bd.commit == latest_bic_commit:
+                    latest_bic = bd
+                    break
         
-        log.info(f"selected bug introducing commit: {latest_bic.commit.hexsha}")
+            log.info(f"selected bug introducing commit: {latest_bic.commit.hexsha}")
         return {latest_bic}
