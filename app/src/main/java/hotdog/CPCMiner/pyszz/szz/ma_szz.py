@@ -88,7 +88,7 @@ class MASZZ(AGSZZ):
         params['ignore_revs_file_path'] = kwargs.get('ignore_revs_file_path', None)
         params['ignore_revs_list'] = list()
 
-        #log.info("staring blame")
+        log.info("staring blame")
         to_blame = True
         start = ts()
         blame_data = list()
