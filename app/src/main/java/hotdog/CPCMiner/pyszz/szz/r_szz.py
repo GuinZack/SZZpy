@@ -29,6 +29,7 @@ class RSZZ(MASZZ):
                         if key == _latest_bic:
                             bic = {file: {_latest_bic.hexsha : bic_candidates.get(file).get(key)}}
                             latest_bic.update(bic)
-                    log.info(f"selected bug introducing commit: {_latest_bic.hexsha}")
+                            print(bic)
+                    #log.info(f"selected bug introducing commit: {_latest_bic.hexsha}")
 
         return latest_bic

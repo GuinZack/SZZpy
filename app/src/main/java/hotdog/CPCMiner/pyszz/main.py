@@ -21,13 +21,20 @@ log.basicConfig(level=log.INFO, format='%(levelname)s :: %(message)s')
 log.getLogger('pydriller').setLevel(log.WARNING)
 
 
-def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
+def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int, index: int):
     with open(input_json, 'r') as in_file:
         bugfix_commits = json.loads(in_file.read())
 
     tot = len(bugfix_commits)
     cpc_pc_pairs = []
+    start_idx = index * size
+    end_idx = (index + 1) * size
+    # enumerate: latest commit to initial commit
     for i, commit in enumerate(bugfix_commits):
+        if i < start_idx:
+            continue
+        if i >= end_idx:
+            break
         bug_introducing_commits = set()
         repo_name = commit['repo_name']
         repo_url = f'https://test:test@github.com/{repo_name}.git'  # using test:test as git login to skip private repos during clone
@@ -106,7 +113,7 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
             log.info(f'SZZ implementation not found: {szz_name}')
             exit(-3)
 
-        log.info(f"result: {bug_introducing_commits}")
+        #log.info(f"result: {bug_introducing_commits}")
 
         if len(bug_introducing_commits) > 0 and None not in bug_introducing_commits:
             for file in bug_introducing_commits.keys():
@@ -121,13 +128,15 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str):
 
 
 if __name__ == "__main__":
-    if (len(sys.argv) > 0 and '--help' in sys.argv[1]) or len(sys.argv) < 3:
-        print('USAGE: python main.py <bugfix_commits.json> <conf_file path> <repos_directory(optional)>')
+    if (len(sys.argv) > 0 and '--help' in sys.argv[1]) or len(sys.argv) < 6:
+        print('USAGE: python main.py <bugfix_commits.json> <conf_file path> <repos_directory> <size> <index>')
         print('If repos_directory is not set, pyszz will download each repository')
         exit(-1)
     input_json = sys.argv[1]
     conf_file = sys.argv[2]
-    repos_dir = sys.argv[3] if len(sys.argv) > 3 else None
+    repos_dir = sys.argv[3]
+    size = sys.argv[4]
+    index = sys.argv[5]
     proj_name = re.split("_pc.json", input_json)[0]
 
     if platform.system() == 'Darwin':
@@ -140,7 +149,7 @@ if __name__ == "__main__":
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
 
-    out_json = os.path.join(out_dir, f'{proj_name}_cpc.json')
+    out_json = os.path.join(out_dir, f'{proj_name}_{index}_cpc.json')
 
     if not os.path.isfile(input_json):
         log.error('invalid input json', f'{input_json}')
@@ -163,4 +172,4 @@ if __name__ == "__main__":
     
     #log.info(f'Launching {szz_name}-szz')
 
-    main(input_json, out_json, conf, repos_dir)
+    main(input_json, out_json, conf, repos_dir, size, index)

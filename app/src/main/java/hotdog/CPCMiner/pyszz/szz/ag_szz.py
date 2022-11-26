@@ -28,9 +28,6 @@ class AGSZZ(AbstractSZZ):
             except Exception as e:
                 log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
 
-        if len(to_exclude) > 0:
-            log.info(f'count of commits excluded by change size > {max_change_size}: {len(to_exclude)}')
-
         return to_exclude
 
     def _ag_annotate(self, impacted_files, **kwargs) -> Set[Commit]:
@@ -83,7 +80,7 @@ class AGSZZ(AbstractSZZ):
         :returns Set[Commit] a set of bug introducing commits candidates, represented by Commit object
         """
 
-        log.info(f"find_bic() kwargs: {kwargs}")
+        #log.info(f"find_bic() kwargs: {kwargs}")
 
         self._set_working_tree_to_commit(fix_commit_hash)
 
@@ -93,13 +90,13 @@ class AGSZZ(AbstractSZZ):
         params['ignore_revs_file_path'] = kwargs.get('ignore_revs_file_path', None)
         params['ignore_revs_list'] = list()
 
-        log.info("staring blame")
+        #log.info("staring blame")
         to_blame = True
         start = ts()
         blame_data = list()
         commits_to_ignore = set()
         while to_blame:
-            log.info(f"excluding commits: {params['ignore_revs_list']}")
+            #log.info(f"excluding commits: {params['ignore_revs_list']}")
             blame_data = self._ag_annotate(impacted_files, **params)
 
             new_commits_to_ignore = set()
@@ -122,9 +119,7 @@ class AGSZZ(AbstractSZZ):
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
             before = len(bic)
             bic = [c for c in bic if c.authored_date <= kwargs['issue_date']]
-            log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
-        else:
-            log.info("Not filtering by issue date.")
+            #log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
         
         return bic
 
@@ -142,7 +137,7 @@ class AGSZZ(AbstractSZZ):
         :returns Set[Commit] a set of bug introducing commits candidates, represented by Commit object
         """
 
-        log.info(f"find_bic() kwargs: {kwargs}")
+        #log.info(f"find_bic() kwargs: {kwargs}")
 
         self._set_working_tree_to_commit(fix_commit_hash)
 
@@ -152,13 +147,13 @@ class AGSZZ(AbstractSZZ):
         params['ignore_revs_file_path'] = kwargs.get('ignore_revs_file_path', None)
         params['ignore_revs_list'] = list()
 
-        log.info("staring blame")
+        #log.info("staring blame")
         to_blame = True
         start = ts()
         blame_data = dict()
         commits_to_ignore = set()
         while to_blame:
-            log.info(f"excluding commits: {params['ignore_revs_list']}")
+            #log.info(f"excluding commits: {params['ignore_revs_list']}")
             blame_data = self.dict_ag_annotate(impacted_files, **params)
 
             # Dict[AnyStr, Dict[Commit, List]]
@@ -192,7 +187,7 @@ class AGSZZ(AbstractSZZ):
         if 'issue_date_filter' in kwargs and kwargs['issue_date_filter']:
             before = len(bic)
             bic = [c for c in bic if c.authored_date <= kwargs['issue_date']]
-            log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
+            #log.info(f'Filtering by issue date returned {len(bic)} out of {before}')
         #else:
             #log.info("Not filtering by issue date.")
         
