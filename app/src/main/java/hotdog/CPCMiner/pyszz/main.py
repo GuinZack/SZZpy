@@ -27,8 +27,8 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
 
     tot = len(bugfix_commits)
     cpc_pc_pairs = []
-    start_idx = index * size
-    end_idx = (index + 1) * size
+    start_idx = int(index) * int(size)
+    end_idx = (int(index) + 1) * int(size)
     # enumerate: latest commit to initial commit
     for i, commit in enumerate(bugfix_commits):
         if i < start_idx:
