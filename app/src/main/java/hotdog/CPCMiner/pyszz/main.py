@@ -153,7 +153,7 @@ if __name__ == "__main__":
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
 
-    out_json = os.path.join(out_dir, f'{proj_name}_{index}_cpc.json')
+    out_json = os.path.join(out_dir, f'{proj_name}_{size}_{index}_cpc.json')
 
     if not os.path.isfile(input_json):
         log.error('invalid input json', f'{input_json}')
