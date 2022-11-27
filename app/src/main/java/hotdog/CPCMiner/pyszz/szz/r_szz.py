@@ -17,7 +17,7 @@ class RSZZ(MASZZ):
         super().__init__(repo_full_name, repo_url, repos_dir)
 
     # TODO: add parse and type check on kwargs
-    def find_bic(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> Set[BlameData]:
+    def find_bic(self, fix_commit_hash: str, impacted_files: List['ImpactedFile'], **kwargs) -> BlameData:
         bic_candidates = super().find_bic(fix_commit_hash, impacted_files, **kwargs)
         bic_candidates_commit = set(bd.commit for bd in bic_candidates)
         latest_bic = None
@@ -29,4 +29,4 @@ class RSZZ(MASZZ):
                     break
         
             log.info(f"selected bug introducing commit: {latest_bic.commit.hexsha}")
-        return {latest_bic}
+        return latest_bic
