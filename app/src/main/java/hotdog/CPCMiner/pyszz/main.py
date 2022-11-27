@@ -28,6 +28,7 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
         bugfix_commits = json.loads(in_file.read())
 
     tot = len(bugfix_commits)
+    cpc_pc_pairs = []
     start_idx = int(index) * int(size)
     end_idx = (int(index) + 1) * int(size)
     # enumerate: latest commit to initial commit
@@ -120,10 +121,11 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
         bugfix_commits[i]["inducing_commit_hash"] = bug_introducing_commits.commit.hexsha
         bugfix_commits[i]["inducing_commit_file"] = bug_introducing_commits.file_path
         bugfix_commits[i]["inducing_commit_line"] = bug_introducing_commits.line_str
+        cpc_pc_pairs.append(bugfix_commits[i])
         log.info(f"result: {bug_introducing_commits.commit.hexsha}")
 
     with open(out_json, 'w') as out:
-        json.dump(bugfix_commits, out)
+        json.dump(cpc_pc_pairs, out)
 
     log.info("+++ DONE +++")
     end_time = datetime.now()
