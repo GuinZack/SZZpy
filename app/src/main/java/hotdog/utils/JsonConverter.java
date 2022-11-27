@@ -25,7 +25,7 @@ public class JsonConverter {
         if (System.getProperty("os.name").toLowerCase().contains("mac"))
             savePath = System.getProperty("user.dir");
         else
-            savePath = "/data/CGYW/CPMiner";
+            savePath = "/home/nayeawon/sliced_CPMiner";
     }
 
     public void convertJsonToObject (String path) {
@@ -43,6 +43,7 @@ public class JsonConverter {
         }
         assert enums != null;
         jsonList = new ArrayList<>(enums);
+        System.out.println(jsonList);
 //        jsonList = enums.stream().toList();
 
     }
@@ -59,9 +60,12 @@ public class JsonConverter {
             out.println("RepoName,CPC,PC,FilePath,Line");
             for (Json j : jsonList) {
                 for (Object tuple : j.inducing_commit_hash) {
-                    // Ex. "inducing_commit_hash": [["face_recognition/api.py",
-                    //                              "99641c5052a944e887fb786983e5575301c604a2",
-                    //                              ["return np.linalg.norm(faces - face_to_compare, axis=1)"]]
+                    // Ex. {
+                    // "fix_commit_hash": "43b2bb2c25d5ed4474d0355ba39f34660fdc0cdd",
+                    // "repo_name": "opencv/opencv",
+                    // "inducing_commit_hash": [["modules/dnn/misc/python/test/test_dnn.py",
+                    //                           "a5c92c202986e932d134860786ac76d156ea5b00",
+                    //                           ["inp = np.random.standard_normal([1, 2, 10, 11]).astype(np.float32)"]]]}
                     String [] path_hash = tuple.toString().split(", ");
                     path_hash[0] = path_hash[0].replace("[",""); // FilePath
                     if (path_hash[2].contains("\"]"))
