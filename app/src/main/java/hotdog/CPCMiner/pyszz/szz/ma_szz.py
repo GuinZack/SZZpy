@@ -106,8 +106,11 @@ class MASZZ(AGSZZ):
                 for bd in blame_data:
                     if bd.commit.hexsha not in new_commits_to_ignore and bd.commit.hexsha not in new_commits_to_ignore_current_file:
                         if bd.commit.hexsha not in commits_to_ignore_current_file:
+                            print("exclude commits by change size")
                             new_commits_to_ignore.update(self._exclude_commits_by_change_size(bd.commit.hexsha, max_change_size=max_change_size))
+                            print("get_merge_commits")
                             new_commits_to_ignore.update(self.get_merge_commits(bd.commit.hexsha))
+                            print("get_meta_changes")
                             new_commits_to_ignore_current_file.update(self.get_meta_changes(bd.commit.hexsha, bd.file_path))
 
                 if len(new_commits_to_ignore) == 0 and len(new_commits_to_ignore_current_file) == 0:
