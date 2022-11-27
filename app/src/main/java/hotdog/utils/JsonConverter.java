@@ -2,6 +2,7 @@ package hotdog.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class JsonConverter {
     private Json json;
-    private List<Json> jsonList;
+    private List<Pair> jsonList;
     private String path;
     private String savePath;
     private class Json {
@@ -28,24 +29,62 @@ public class JsonConverter {
             savePath = "/home/nayeawon/sliced_CPMiner";
     }
 
-    public void convertJsonToObject (String path) {
-        this.path = path;
-        Collection<Json> enums = null;
-        try (Reader reader = new FileReader(savePath + "/_CPC/" +path)) {
-            Gson gson = new Gson();
-            // Convert JSON File to Java Object
-//            json = gson.fromJson(reader, Json.class);
-
-            Type collectionType = new TypeToken<Collection<Json>>(){}.getType();
-            enums = gson.fromJson(reader, collectionType);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private class Pair {
+        private String Repo;
+        private String CPC;
+        private String PC;
+        private String File;
+        private String Line;
+        public Pair (String Repo, String CPC, String PC, String File, String Line) {
+            this.Repo = Repo;
+            this.CPC = CPC;
+            this.PC = PC;
+            this.File = File;
+            this.Line = Line;
         }
-        assert enums != null;
-        jsonList = new ArrayList<>(enums);
-        System.out.println(jsonList);
-//        jsonList = enums.stream().toList();
+    }
 
+    private Pair readJsonObject (JsonReader reader) {
+        String Repo = null;
+        String CPC = null;
+        String PC = null;
+        String File = null;
+        String Line = null;
+
+        try {
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String line = reader.nextName();
+                if (line.equals("repo_name")) Repo = reader.nextString();
+                else if (line.equals("inducing_commit_hash")) CPC = reader.nextString();
+                else if (line.equals("fix_commit_hash")) PC = reader.nextString();
+                else if (line.equals("inducing_commit_file")) File = reader.nextString();
+                else if (line.equals("inducing_commit_line")) Line = reader.nextString();
+                else reader.skipValue();
+            }
+            reader.endObject();
+            if (Repo == null || CPC == null || PC == null || File == null || Line == null) return null;
+            return new Pair(Repo, CPC, PC, File, Line);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void convertJsonToObject (String path) {
+        jsonList = new ArrayList<>();
+        try {
+            JsonReader reader = new JsonReader(new FileReader(savePath + "/_CPC/" +path));
+            reader.beginArray();
+            while (reader.hasNext()) {
+                Pair pair = readJsonObject(reader);
+                if (pair == null) continue;
+                jsonList.add(pair);
+            }
+            reader.endArray();
+            reader.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 //projectname_cpc.json
     public void convertObjectToCsv () {
@@ -58,24 +97,9 @@ public class JsonConverter {
             FileOutputStream fos = new FileOutputStream(file);
             PrintWriter out = new PrintWriter(fos);
             out.println("RepoName,CPC,PC,FilePath,Line");
-            for (Json j : jsonList) {
-                for (Object tuple : j.inducing_commit_hash) {
-                    // Ex. {
-                    // "fix_commit_hash": "43b2bb2c25d5ed4474d0355ba39f34660fdc0cdd",
-                    // "repo_name": "opencv/opencv",
-                    // "inducing_commit_hash": [["modules/dnn/misc/python/test/test_dnn.py",
-                    //                           "a5c92c202986e932d134860786ac76d156ea5b00",
-                    //                           ["inp = np.random.standard_normal([1, 2, 10, 11]).astype(np.float32)"]]]}
-                    String [] path_hash = tuple.toString().split(", ");
-                    path_hash[0] = path_hash[0].replace("[",""); // FilePath
-                    if (path_hash[2].contains("\"]"))
-                        path_hash[2] = path_hash[2].substring(path_hash[2].indexOf("[")+1,
-                                                                path_hash[2].lastIndexOf("]")-2); // Line
-                    else path_hash[2] = path_hash[2].substring(1);
-                    out.println(j.repo_name + "," + path_hash[1] + "," + j.fix_commit_hash + ","
-                                    + path_hash[0] + "," + path_hash[2]);
-                }
-
+            for (Pair pair: jsonList) {
+                out.println(pair.Repo + "," + pair.CPC + "," + pair.PC + ","
+                        + pair.File + "," + pair.Line);
             }
             out.flush();
             out.close();
