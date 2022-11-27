@@ -42,10 +42,6 @@ class MASZZ(AGSZZ):
             else:
                 try:
                     for m in commit.modifications:
-                        print(current_file)
-                        print(m.new_path)
-                        print(m.change_type)
-                        print(self.change_types_to_ignore)
                         if (current_file == m.new_path or current_file == m.old_path) and (m.change_type in self.change_types_to_ignore):
                             #log.info(f'exclude meta-change ({m.change_type}): {current_file} {commit.hash}')
                             meta_changes.add(commit.hash)
@@ -62,6 +58,7 @@ class MASZZ(AGSZZ):
                 if commit.merge:
                     merge.add(commit.hash)
             except Exception as e:
+                print(e)
                 log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
 
         if len(merge) > 0:
