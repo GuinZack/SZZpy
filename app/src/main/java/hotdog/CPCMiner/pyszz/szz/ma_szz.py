@@ -33,9 +33,8 @@ class MASZZ(AGSZZ):
 
     def get_meta_changes(self, commit_hash: str, current_file: str) -> Set[str]:
         meta_changes = set()
-        repo_mining = Repository(path_to_repo=self.repository_path, single=commit_hash).traverse_commits()
+        repo_mining = Repository(self.repository_path, single=commit_hash).traverse_commits()
         for commit in repo_mining:
-            print(commit)
             show_str = self.repository.git.show(commit.hash, '--summary').splitlines()
             if show_str and self._is_git_mode_change(show_str, current_file):
                 #log.info(f'exclude meta-change (file mode change): {current_file} {commit.hash}')
@@ -43,6 +42,10 @@ class MASZZ(AGSZZ):
             else:
                 try:
                     for m in commit.modifications:
+                        print(current_file)
+                        print(m.new_path)
+                        print(m.change_type)
+                        print(self.change_types_to_ignore)
                         if (current_file == m.new_path or current_file == m.old_path) and (m.change_type in self.change_types_to_ignore):
                             #log.info(f'exclude meta-change ({m.change_type}): {current_file} {commit.hash}')
                             meta_changes.add(commit.hash)
