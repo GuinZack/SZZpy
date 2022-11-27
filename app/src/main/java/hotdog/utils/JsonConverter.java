@@ -72,6 +72,7 @@ public class JsonConverter {
 
     public void convertJsonToObject (String path) {
         jsonList = new ArrayList<>();
+        this.path = path;
         try {
             JsonReader reader = new JsonReader(new FileReader(savePath + "/_CPC/" +path));
             reader.beginArray();
