@@ -46,6 +46,7 @@ class MASZZ(AGSZZ):
                             #log.info(f'exclude meta-change ({m.change_type}): {current_file} {commit.hash}')
                             meta_changes.add(commit.hash)
                 except Exception as e:
+                    print(e)
                     log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
 
         return meta_changes
@@ -58,7 +59,6 @@ class MASZZ(AGSZZ):
                 if commit.merge:
                     merge.add(commit.hash)
             except Exception as e:
-                print(e)
                 log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
 
         if len(merge) > 0:
