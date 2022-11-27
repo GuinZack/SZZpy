@@ -115,6 +115,9 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
             exit(-3)
 
         #log.info(f"result: {bug_introducing_commits}")
+        if len(bug_introducing_commits) == 0:
+            log.info(f'No BIC found for {szz_name} for {fix_commit}')
+            continue
         bugfix_commits[i]["inducing_commit_hash"] = [bic.commit.hexsha for bic in bug_introducing_commits if bic]
         bugfix_commits[i]["inducing_commit_file"] = [bic.file_path for bic in bug_introducing_commits if bic]
         bugfix_commits[i]["inducing_commit_line"] = [bic.line_str for bic in bug_introducing_commits if bic]
