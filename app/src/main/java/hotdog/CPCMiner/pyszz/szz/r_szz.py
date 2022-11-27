@@ -28,5 +28,5 @@ class RSZZ(MASZZ):
                     latest_bic = bd
                     break
         
-            log.info(f"selected bug introducing commit: {latest_bic.commit.hexsha}")
+            #log.info(f"selected bug introducing commit: {latest_bic.commit.hexsha}")
         return latest_bic

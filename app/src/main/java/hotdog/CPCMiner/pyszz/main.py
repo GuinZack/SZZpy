@@ -114,13 +114,13 @@ def main(input_json: str, out_json: str, conf: dict(), repos_dir: str, size: int
             log.info(f'SZZ implementation not found: {szz_name}')
             exit(-3)
 
-        #log.info(f"result: {bug_introducing_commits}")
         if bug_introducing_commits is None:
             log.info(f'No BIC found for {szz_name} for {fix_commit}')
             continue
         bugfix_commits[i]["inducing_commit_hash"] = bug_introducing_commits.commit.hexsha
         bugfix_commits[i]["inducing_commit_file"] = bug_introducing_commits.file_path
         bugfix_commits[i]["inducing_commit_line"] = bug_introducing_commits.line_str
+        log.info(f"result: {bug_introducing_commits.commit.hexsha}")
 
     with open(out_json, 'w') as out:
         json.dump(bugfix_commits, out)

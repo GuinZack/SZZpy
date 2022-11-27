@@ -38,13 +38,13 @@ class MASZZ(AGSZZ):
             print(commit)
             show_str = self.repository.git.show(commit.hash, '--summary').splitlines()
             if show_str and self._is_git_mode_change(show_str, current_file):
-                log.info(f'exclude meta-change (file mode change): {current_file} {commit.hash}')
+                #log.info(f'exclude meta-change (file mode change): {current_file} {commit.hash}')
                 meta_changes.add(commit.hash)
             else:
                 try:
                     for m in commit.modifications:
                         if (current_file == m.new_path or current_file == m.old_path) and (m.change_type in self.change_types_to_ignore):
-                            log.info(f'exclude meta-change ({m.change_type}): {current_file} {commit.hash}')
+                            #log.info(f'exclude meta-change ({m.change_type}): {current_file} {commit.hash}')
                             meta_changes.add(commit.hash)
                 except Exception as e:
                     log.error(f'unable to analyze commit: {self.repository_path} {commit.hash}')
@@ -88,7 +88,7 @@ class MASZZ(AGSZZ):
         params['ignore_revs_file_path'] = kwargs.get('ignore_revs_file_path', None)
         params['ignore_revs_list'] = list()
 
-        log.info("staring blame")
+        #log.info("staring blame")
         to_blame = True
         start = ts()
         blame_data = list()
